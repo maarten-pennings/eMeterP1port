@@ -1,4 +1,4 @@
-# MeterP1port
+# e-Meter P1 port
 ESP8266 Arduino sketch to read Dutch e-Meters and upload to ThingSpeak.
 
 Disclaimer: I put the Arduino sketck on GitHub nearly three years after I developed it. 
