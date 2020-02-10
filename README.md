@@ -13,7 +13,7 @@ The Dutch goverment has [standardized](https://www.netbeheernederland.nl/_upload
 One interesting aspect is that Dutch smart meters are required to have a so-called P1 port. Basically, this is a (transmit-only)
 serial port, that spits out the meter readings every 10 seconds.
 
-This project uses an ESP8266 to receive the readings, and uploads them to the cloud ([ThingSpeak](https://thingspeak.com/))
+This project uses an ESP8266 to receive the readings, and uploads them to the cloud ([ThingSpeak](https://thingspeak.com/)).
 
 ## Wiring
 
@@ -24,8 +24,8 @@ However, in practice there are some considerations.
 
  - The P1 port is write-only (from the perspective of the meter).
  - The P1 port does seem to deliver sufficient power (5V, 250mA), nevertheless, I run my NodeMCU from a separate USB power supply.
- - The P1 port has a "data request", this must be pulled high, for the e-meter to produce data
- - The P1 port has a "data out" which uses UART encoding: 115200/*/N/1
+ - The P1 port has a "data request", this must be pulled high, for the e-meter to produce data.
+ - The P1 port has a "data out" which uses UART encoding: 115200/*/N/1.
  - However, as the specification states 
    _the “Data” line must be designed as an Open Collector output, the “Data” line must be logically inverted_. 
    In other words, the signal is inverted.
@@ -37,7 +37,7 @@ you can download FT_Prog. This windows program allows configuring an FTDI cable:
 explains "Additional features available on the FT232R device allow RS232 signals to be inverted". 
 That's what we need for the data pin.
 
-You can also buy a [dedicated cable](https://www.aliexpress.com/i/32945225256.html)
+You can also buy a [dedicated cable](https://www.aliexpress.com/i/32945225256.html).
 
 ![USB cable](usb.png)
 
@@ -54,7 +54,7 @@ This is the wiring:
 
 ## Parsing
 Once the wiring is established, we receive data.
-This is an example from some e-Meter found [elsewhere](http://domoticx.com/p1-poort-slimme-meter-hardware/)
+This is an example from some e-Meter found [elsewhere](http://domoticx.com/p1-poort-slimme-meter-hardware/).
 
 ```
 /ISk5\2MT382-1 000
@@ -89,6 +89,6 @@ This is an example from some e-Meter found [elsewhere](http://domoticx.com/p1-po
 !522B
 ```
 
-we need to understand the data.
+We need to understand the data.
 The official [spec](https://www.netbeheernederland.nl/_upload/Files/Slimme_meter_15_a727fce1f1.pdf) is helpful here.
 
