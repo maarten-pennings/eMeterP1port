@@ -1,4 +1,5 @@
 // e-meter P1 port --> webserver (thingspeak, webmsg)
+// 2020 feb 10  v7  Maarten Pennings  Added to https://github.com/maarten-pennings/eMeterP1port
 // 2018 nov 12  v6  Maarten Pennings  Better help strings for Cfg
 // 2017 may 07  v5  Maarten Pennings  Added Cfg module
 // 2017 may 06  v4  Maarten Pennings  Added get method to second server
@@ -204,7 +205,7 @@ int p1_decode_stream(p1_line_t * t, p1_parsed_t * p) {
 }
 
 
-// e-meter P1 port: D6 for rx, inverted signals, buffer size
+// e-meter P1 port: D6 for rx, tx, inverted signals, buffer size
 SoftwareSerial p1_serial(D6, SW_SERIAL_UNUSED_PIN, true, P1_MAXLINELENGTH); 
 p1_line_t      p1_line;
 
