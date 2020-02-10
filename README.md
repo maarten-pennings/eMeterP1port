@@ -48,11 +48,47 @@ The connector to mate with the e-meter is an RJ (telephone) jack.
 The official standard prescribes an **RJ12**	plug, which is a 6 pole 6 connector (6P6C) plug.
 Since we will not use the outer two pins (power), we can also take a **RJ14** (6P4C) plug.
 
-This is the wireing:
+This is the wiring:
 
 ![Wiring](connection.png)
 
 ## Parsing
-Once the wiring is established, we need to parse the data.
+Once the wiring is established, we receive data.
+This is an example from some e-Meter found [elsewhere](http://domoticx.com/p1-poort-slimme-meter-hardware/)
+
+```
+/ISk5\2MT382-1 000
+1-3:0.2.8(40)
+0-0:1.0.0(101209113020W)
+0-0:96.1.1(4B384547303034303436333935353037)
+1-0:1.8.1(123456.789*kWh)
+1-0:1.8.2(123456.789*kWh)
+1-0:2.8.1(123456.789*kWh)
+1-0:2.8.2(123456.789*kWh)
+0-0:96.14.0(0002)
+1-0:1.7.0(01.193*kW)
+1-0:2.7.0(00.000*kW)
+0-0:17.0.0(016.1*kW)
+0-0:96.3.10(1)
+0-0:96.7.21(00004)
+0-0:96.7.9(00002)
+1-0:99:97.0(2)(0:96.7.1 9)(101208152415W)(0000000240*s)(101208151004W)(00000000301*s)
+1-0:32.32.0(00002)
+1-0:52.32.0(00001)
+1-0:72:32.0(00000)
+1-0:32.36.0(00000)
+1-0:52.36.0(00003)
+1-0:72.36.0(00000)
+0-0:96.13.1(3031203631203831)
+0-0:96.13.0(303132333435363738393A3B3C3D3E3F303132333435363738393A3B3C3D3E3F303132333435363738393A3B
+3C3D3E3F303132333435363738393A3B3C3D3E3F303132333435363738393A3B3C3D3E3F)
+0-1:24.1.0(03)
+0-1:96.1.0(3232323241424344313233343536373839)
+0-1:24.2.1(101209110000W)(12785.123*m3)
+0-1:24.4.0(1)
+!522B
+```
+
+we need to understand the data.
 The official [spec](https://www.netbeheernederland.nl/_upload/Files/Slimme_meter_15_a727fce1f1.pdf) is helpful here.
 
