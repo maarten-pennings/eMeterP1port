@@ -105,14 +105,16 @@ My project is a rather complete "product":
  - When pressing the 'flash' button while booting, the product starts an access point and webserver through which
    the user can configure the SSID and password of the WiFi network. Also the post message and/or get message
    can be configured.
-   
-![Web configuration](webcfg.png)
 
 For the configuration, I used my own [Cfg](https://github.com/maarten-pennings/Cfg) library,
-which my [Nvm](https://github.com/maarten-pennings/Nvm) library.
+with my [Nvm](https://github.com/maarten-pennings/Nvm) library.
 
 I used software serial. I believe it comes as a standard Arduino library, but maybe I downloaded it 
 [here](https://github.com/plerup/espsoftwareserial/blob/master/src/SoftwareSerial.h). 
+
+This is a screenshot from the configuration screen.
+
+![Web configuration](webcfg.png)
 
 
 ## Source
