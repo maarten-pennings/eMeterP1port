@@ -206,7 +206,8 @@ int p1_decode_stream(p1_line_t * t, p1_parsed_t * p) {
 
 
 // e-meter P1 port: D6 for rx, tx, inverted signals, buffer size
-SoftwareSerial p1_serial(D6, SW_SERIAL_UNUSED_PIN, true, P1_MAXLINELENGTH); 
+//SoftwareSerial p1_serial(D6, SW_SERIAL_UNUSED_PIN, true, P1_MAXLINELENGTH); 
+SoftwareSerial p1_serial(D6, -1, true); 
 p1_line_t      p1_line;
 
 

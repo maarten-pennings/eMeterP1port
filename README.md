@@ -103,16 +103,16 @@ My project is a rather complete "product":
    I typically use this to send data (current electricity usage) to an ESP8266 based display.
    See a [video example](https://youtu.be/ZBvKilhE66w).
  - When pressing the 'flash' button while booting, the product starts an access point and webserver through which
-   the user can configure the SSID and password of the wifi network. Also the post message and/or get message
+   the user can configure the SSID and password of the WiFi network. Also the post message and/or get message
    can be configured.
+   
+![Web configuration](webcfg.png)
 
 For the configuration, I used my own [Cfg](https://github.com/maarten-pennings/Cfg) library,
 which my [Nvm](https://github.com/maarten-pennings/Nvm) library.
 
-I used software serial. I believe it comes as a standard arduino library, but maybe I downloaded it 
-[here](https://github.com/plerup/espsoftwareserial/blob/master/src/SoftwareSerial.h). It seems 
-the library has evolved: my code uses a 4 parameter constructor, but in the current version,
-the last parameter (buffer size) seems to have moved to the `begin` call.
+I used software serial. I believe it comes as a standard Arduino library, but maybe I downloaded it 
+[here](https://github.com/plerup/espsoftwareserial/blob/master/src/SoftwareSerial.h). 
 
 
 ## Source
