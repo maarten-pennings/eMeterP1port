@@ -13,7 +13,8 @@ The Dutch goverment has [standardized](https://www.netbeheernederland.nl/_upload
 One interesting aspect is that Dutch smart meters are required to have a so-called P1 port. Basically, this is a (transmit-only)
 serial port, that spits out the meter readings every 10 seconds.
 
-This project uses an ESP8266 to receive the readings, and uploads them to the cloud ([ThingSpeak](https://thingspeak.com/)).
+This project uses an ESP8266 to receive the readings, and uploads them to a webserver; 
+this could be, for example, ([ThingSpeak](https://thingspeak.com/)).
 
 ## Wiring
 
