@@ -112,10 +112,18 @@ My project is a rather complete "product":
 For the configuration, I used my own [Cfg](https://github.com/maarten-pennings/Cfg) library,
 with my [Nvm](https://github.com/maarten-pennings/Nvm) library.
 
-I used software serial. I believe it comes as a standard Arduino library, but maybe I downloaded it 
+I used a "software serial" library. I believe it comes as a standard Arduino library, but maybe I downloaded it 
 [here](https://github.com/plerup/espsoftwareserial/blob/master/src/SoftwareSerial.h). 
 
 This is a screenshot from the configuration screen.
+The first two fields configure your (home) SSID and password,
+so that the ESP8266 can reach webservers to send the measured data to.
+
+Next, you can configure a POST and/or a GET to webserver.
+The  data message that will be send can be configured.
+A field like `%p` is replaced by the current power in Watt.
+
+The screen shot shows a configuration for posts to ThingSpeak and a get to a local display that I made from an ESP8266.
 
 ![Web configuration](webcfg.png)
 
