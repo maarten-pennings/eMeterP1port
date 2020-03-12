@@ -14,7 +14,7 @@ One interesting aspect is that Dutch smart meters are required to have a so-call
 serial port, that spits out the meter readings every 10 seconds.
 
 This project uses an ESP8266 to receive the readings, and uploads them to a webserver; 
-this could be, for example, ([ThingSpeak](https://thingspeak.com/)).
+this could be a cloud service like [ThingSpeak](https://thingspeak.com/).
 
 ## Wiring
 
