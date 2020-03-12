@@ -43,11 +43,13 @@ You can also buy a [dedicated cable](https://www.aliexpress.com/i/32945225256.ht
 ![USB cable](usb.png)
 
 ### Wire to ESP8266
-For the real project, we will use a software UART on the ESP8266, so no "active" is needed.
+For the real project, we will use a software UART on the ESP8266.
 
 The connector to mate with the e-meter is an RJ (telephone) jack. 
 The official standard prescribes an **RJ12**	plug, which is a 6 pole 6 connector (6P6C) plug.
-Since we will not use the outer two pins (power), we can also take a **RJ14** (6P4C) plug.
+Since I did not use the outer two pins (power), we can also take a **RJ14** (6P4C) plug: it has 6 poles, 
+but only the middle 4 are wired (a nice extension would be to run the ESP8266 from the 5V of the e-Meter, 
+using the outer two poles).
 
 This is the wiring:
 
