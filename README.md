@@ -26,7 +26,7 @@ However, in practice there are some considerations.
  - The P1 port is write-only (from the perspective of the meter).
  - The P1 port does seem to deliver sufficient power (5V, 250mA), nevertheless, I run my NodeMCU from a separate USB power supply.
  - The P1 port has a "data request", this must be pulled high, for the e-meter to produce data.
- - The P1 port has a "data out" which uses UART encoding: 115200/*/N/1.
+ - The P1 port has a "data out" which uses UART encoding: 115200/8/N/1.
  - However, as the specification states 
    _the “Data” line must be designed as an Open Collector output, the “Data” line must be logically inverted_. 
    In other words, the signal is inverted.
