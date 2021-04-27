@@ -1,4 +1,5 @@
 // e-meter P1 port --> webserver (thingspeak, webmsg)
+// 2021 apr 17  v8  Maarten Pennings  After power failure no longer worked; improved CFG screen, added versions
 // 2020 feb 10  v7  Maarten Pennings  Added to https://github.com/maarten-pennings/eMeterP1port
 // 2018 nov 12  v6  Maarten Pennings  Better help strings for Cfg
 // 2017 may 07  v5  Maarten Pennings  Added Cfg module
@@ -7,7 +8,7 @@
 // 2017 apr 30  v2  Maarten Pennings  Add extra state checking
 // 2017 apr 02  v1  Maarten Pennings  Created
 #include <ESP8266WiFi.h>
-#include <SoftwareSerial.h>
+#include "SoftwareSerial.h"
 #include <string.h>
 #include <stdlib.h>  
 #include <Cfg.h>
@@ -15,24 +16,36 @@ extern "C" {
 #include "user_interface.h"
 }
 
+#define APP_VERSION "v8"
+
+#ifndef EspSoftwareSerialVersion
+// I patched "C:\Users\maarten\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\2.7.4\libraries\SoftwareSerial\src\SoftwareSerial.h"
+// To have a line like "#define EspSoftwareSerialVersion "v6.8.5" version found in "..\library.properties"
+#define EspSoftwareSerialVersion "unknown"
+#warning Unknown version for EspSoftwareSerialVersion
+#endif
+
 
 // Cfg ======================================================================================================
 
 
 // The configurable fields used by this application
 NvmField CfgEmp1Fields[] = {
-  {"ssid"      , "MySSID"                                            , 32, "The ssid of the wifi network this device should connect to." },
-  {"password"  , "MyPassword"                                        , 32, "The password of the wifi network this device should connect to."},
+  {"Access point"    , ""                                                  ,  0, "The eMP1 publishes data over internet. Supply credentials for a WiFi access point it should connect to. " },
+  {"ssid"            , "MySSID"                                            , 32, "The ssid of the wifi network this device should connect to." },
+  {"password"        , "MyPassword"                                        , 32, "The password of the wifi network this device should connect to. "},
   
-  {"postserver", "api.thingspeak.com"                                , 32, "The name of the server to which measurements are send via POST (empty for none)."},
-  {"posturl"   , "/update"                                           , 32, "The URL for the POST server."},
-  {"postbody1" , "field1=%L&field2=%H&field3=%P&field4=%I&field5=%D&", 64, "Body part 1 [HELP: %L=E1-kWh, %H=E2-kWh, %P=Pow-kW, %I=lo:1/hi:2, %D=E-time]"},
-  {"postbody2" , "field6=%G&field7=%T&field8=%E&key=MyWriteKeyXXXXXX", 64, "Body part 2 [HELP: %G=G-m3, %T=G-time, %E=NUM-comm-errors, %p=Pow-W]"},
+  {"Server 1 (post)" , ""                                                  ,  0, "The eMP1 may publish data using the 'POST' protocol. Supply the server, URL and the post body (in two chunks), or leave blank. " },
+  {"postserver"      , "api.thingspeak.com"                                , 32, "The name of the server to which measurements are send via POST (empty for none)."},
+  {"posturl"         , "/update"                                           , 32, "The URL for the POST server."},
+  {"postbody1"       , "field1=%L&field2=%H&field3=%P&field4=%I&field5=%D&", 64, "Body part 1 [HELP: %L=E1-kWh, %H=E2-kWh, %P=Pow-kW, %I=lo:1/hi:2, %D=E-time]."},
+  {"postbody2"       , "field6=%G&field7=%T&field8=%E&key=MyWriteKeyXXXXXX", 64, "Body part 2 [HELP: %G=G-m3, %T=G-time, %E=Number-comm-errors, %p=Pow-W]. "},
 
-  {"getserver" , "nwebmsg.fritz.box"  /* "192.168.179.74" */         , 32, "The name of the server to which measurements are send via GET (empty for none)."},
-  {"geturl"    , "/?msg=%p&mode=right"                               , 32, "The URL for the GET server.[HELP: use % as in postbody]"},
+  {"Server 2 (get)"  , ""                                                  ,  0, "The eMP1 may publish data using the 'GET' protocol. Supply the server and URL, or leave blank. " },
+  {"getserver"       , "nwebmsg.fritz.box"  /* "192.168.179.74" */         , 32, "The name of the server to which measurements are send via GET (empty for none)."},
+  {"geturl"          , "/?msg=%p&mode=right"                               , 32, "The URL for the GET server.[HELP: use % as in postbody]"},
 
-  {0           , 0              ,  0, 0},  
+  {0                 , 0                                                   ,  0, 0},  
 };
 Cfg cfg("eMP1", CfgEmp1Fields, CFG_SERIALLVL_USR);
 
@@ -40,14 +53,13 @@ Cfg cfg("eMP1", CfgEmp1Fields, CFG_SERIALLVL_USR);
 // Process P1 data ==========================================================================================
 
 
-#define P1_MAXLINELENGTH 64 // longest normal line is 47 char (+3 for \r\n\0)
-#define P1_MAXFIELDSIZE  16 // longest field in a line
+#define P1_MAXLINELENGTH 120 // longest normal line I have seen is 86 (1-0:99.97.0 Power Failure Event Log) 
+#define P1_MAXFIELDSIZE   16 // longest field in a line
 
 
-// It seems that in Arduino, typedefs must be at the top of a file
-// Variables of this type contain a P1 telegram line transmitted by the emeter (e.g. text)
+// Variables of this type contain a P1 telegram _line_ transmitted by the emeter (i.e. text)
 typedef struct {
-  char          data[P1_MAXLINELENGTH];
+  char          data[P1_MAXLINELENGTH+2]; // reserve 2 so that we can append \n\0
   int           len; // length of data data[len-1]=='\n' and data[len]==0;
 } p1_line_t; 
 
@@ -205,9 +217,10 @@ int p1_decode_stream(p1_line_t * t, p1_parsed_t * p) {
 }
 
 
-// e-meter P1 port: D6 for rx, tx, inverted signals, buffer size
-//SoftwareSerial p1_serial(D6, SW_SERIAL_UNUSED_PIN, true, P1_MAXLINELENGTH); 
-SoftwareSerial p1_serial(D6, -1, true); 
+// e-meter P1 port: D6 for rx, no tx, inverted signals
+// Constructor: SoftwareSerial(int8_t rxPin, int8_t txPin = -1, bool invert = false);
+#define P1_RXPIN D6
+SoftwareSerial p1_serial(P1_RXPIN, -1, true); // See begin(), it re-sets these values
 p1_line_t      p1_line;
 
 
@@ -217,10 +230,12 @@ int p1_read_emeter(p1_parsed_t * p) {
   int result = PARSE_IDLE;
   p1_line_t *t = &p1_line;
   while( p1_serial.available() ) {
-    t->len= p1_serial.readBytesUntil('\n', t->data, P1_MAXLINELENGTH);
+    t->len= p1_serial.readBytesUntil('\n', t->data, P1_MAXLINELENGTH); // t->data does not have the \n
+    if( t->len==P1_MAXLINELENGTH ) Serial.printf("  WARNING: line length overflow\n");
+    // t->data has 2 more free locations after P1_MAXLINELENGTH
     t->data[t->len++]= '\n';
     t->data[t->len]= 0;
-    //Serial.print(t->data);
+    // Serial.print(t->data);
     result = p1_decode_stream(t,p);
     if( result==PARSE_END_WHILE_PARSING_COMPLETE_INFO ) break;
     delay(1);
@@ -231,7 +246,7 @@ int p1_read_emeter(p1_parsed_t * p) {
 
 // LED ==========================================================================================
 
-
+ 
 // GPIO16 == D4 == BLUE led (LED on == D4 low)
 #define LED_BLUEPIN    2  
 
@@ -394,12 +409,17 @@ void setup() {
   WiFi.hostname("eMP1");  
   
   // Debug prints
+  delay(1000);
   Serial.begin(115200);
-  Serial.printf("\n\ne-meter P1 port\n");
+  Serial.printf("\n\nWelcome to e-meter P1 port\n");
+  Serial.printf("  App: " APP_VERSION "\n");
+  Serial.printf("  CFG: " CFG_VERSION "\n");
+  Serial.printf("  NVM: " NVM_VERSION "\n");
+  Serial.printf("  EspSoftwareSerial: " EspSoftwareSerialVersion "\n");
 
   // Speed
   system_update_cpu_freq(SYS_CPU_160MHZ);
-  Serial.printf("Running at %dMHz\n", system_get_cpu_freq() );
+  Serial.printf("Running at %dMHz\n\n", system_get_cpu_freq() );
   
   // On boot: check if config button is pressed
   cfg.check(); 
@@ -412,7 +432,9 @@ void setup() {
   wifi_init();
   
   // P1 port
-  p1_serial.begin(115200); // ESP8266 must run at @160 MHz
+  // void begin(uint32_t baud, SoftwareSerialConfig config, int8_t rxPin, int8_t txPin, bool invert, int bufCapacity = 64, int isrBufCapacity = 0);
+  p1_serial.begin(115200, SWSERIAL_8N1, P1_RXPIN, -1, true, 1024 ); // isBufCapacity is derived
+  //p1_serial.begin(115200);
   parsed.flags = 0; // init statemachine
   parsed.commerrors = 0; // no p1 read errors yet
 }

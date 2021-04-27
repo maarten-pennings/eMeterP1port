@@ -13,15 +13,15 @@ The Dutch goverment has [standardized](https://www.netbeheernederland.nl/_upload
 One interesting aspect is that Dutch smart meters are required to have a so-called P1 port. Basically, this is a (transmit-only)
 serial port, that spits out the meter readings every 10 seconds.
 
-This project uses an ESP8266 to receive the readings, and uploads them to a webserver; 
+This project uses an ESP8266 to receive the readings, and to upload them to a webserver; 
 this could be a cloud service like [ThingSpeak](https://thingspeak.com/).
 
 ## Wiring
 
 As mentioned in the introduction, the P1 port is basically a serial port.
 
-### Considerations
-However, in practice there are some considerations.
+### P1 port considerations
+In practice the P1 port has some peculiarities.
 
  - The P1 port is write-only (from the perspective of the meter).
  - The P1 port does seem to deliver sufficient power (5V, 250mA), nevertheless, I run my NodeMCU from a separate USB power supply.
@@ -34,7 +34,8 @@ However, in practice there are some considerations.
 ### Wire to PC (USB)
 I started this project with an [FTDI cable](https://nl.farnell.com/ftdi/ttl-232r-3v3/cable-usb-to-ttl-level-serial/dp/1329311). 
 On the [FTDI website](https://www.ftdichip.com/Support/Utilities.htm)
-you can download FT_Prog. This windows program allows configuring an FTDI cable: "5.5 FT232R Hardware_Specific"
+you can download **FT_Prog**. This windows program allows configuring an FTDI cable.
+The crucial aspect is that we can invert the data. Section "5.5 FT232R Hardware_Specific"
 explains "Additional features available on the FT232R device allow RS232 signals to be inverted". 
 That's what we need for the data pin.
 
@@ -45,7 +46,7 @@ You can also buy a [dedicated cable](https://www.aliexpress.com/i/32945225256.ht
 ### Wire to ESP8266
 For the real project, we will use a software UART on the ESP8266.
 
-The connector to mate with the e-meter is an RJ (telephone) jack. 
+The connector to mate with the e-meter is an RJ ("telephone") jack. 
 The official standard prescribes an **RJ12**	plug, which is a 6 pole 6 connector (6P6C) plug.
 Since I did not use the outer two pins (power), we can also take a **RJ14** (6P4C) plug: it has 6 poles, 
 but only the middle 4 are wired (a nice extension would be to run the ESP8266 from the 5V of the e-Meter, 
