@@ -7,6 +7,7 @@
 // 2017 may 02  v3  Maarten Pennings  post via char*, not String
 // 2017 apr 30  v2  Maarten Pennings  Add extra state checking
 // 2017 apr 02  v1  Maarten Pennings  Created
+#include <core_version.h>   // ARDUINO_ESP8266_RELEASE
 #include <ESP8266WiFi.h>
 #include "SoftwareSerial.h"
 #include <string.h>
@@ -18,11 +19,13 @@ extern "C" {
 
 #define APP_VERSION "v8"
 
+
+// I patched SoftwareSerialVersion to publish its version number as EspSoftwareSerialVersion
 #ifndef EspSoftwareSerialVersion
-// I patched "C:\Users\maarten\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\2.7.4\libraries\SoftwareSerial\src\SoftwareSerial.h"
-// To have a line like "#define EspSoftwareSerialVersion "v6.8.5" version found in "..\library.properties"
+// I patched "C:\Users\maarten\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\2.7.4\libraries\SoftwareSerial\src\SoftwareSerial.h" to have a line like:   
+//   #define EspSoftwareSerialVersion "6.8.5" // version copied from "..\library.properties"
 #define EspSoftwareSerialVersion "unknown"
-#warning Unknown version for EspSoftwareSerialVersion
+#warning Unknown version for EspSoftwareSerialVersion, needs a patch
 #endif
 
 
@@ -412,6 +415,9 @@ void setup() {
   delay(1000);
   Serial.begin(115200);
   Serial.printf("\n\nWelcome to e-meter P1 port\n");
+  #warning Hand-edit IDE version
+  Serial.printf("  IDE: 1.8.13\n");
+  Serial.printf("  BSP: " ARDUINO_ESP8266_RELEASE "\n");
   Serial.printf("  App: " APP_VERSION "\n");
   Serial.printf("  CFG: " CFG_VERSION "\n");
   Serial.printf("  NVM: " NVM_VERSION "\n");
@@ -432,9 +438,7 @@ void setup() {
   wifi_init();
   
   // P1 port
-  // void begin(uint32_t baud, SoftwareSerialConfig config, int8_t rxPin, int8_t txPin, bool invert, int bufCapacity = 64, int isrBufCapacity = 0);
-  p1_serial.begin(115200, SWSERIAL_8N1, P1_RXPIN, -1, true, 1024 ); // isBufCapacity is derived
-  //p1_serial.begin(115200);
+  p1_serial.begin(115200);
   parsed.flags = 0; // init statemachine
   parsed.commerrors = 0; // no p1 read errors yet
 }
