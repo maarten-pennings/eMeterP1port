@@ -116,13 +116,14 @@ uint32_t p1_time; // If p1_len>0 time of first char. If p1_len==0 time of last w
 uint32_t p1_count_ok; // number of received telegrams (with matching CRC)
 uint32_t p1_count_err; // number of corrupt telegrams
 
-//SoftwareSerial p1_serial;
-SoftwareSerial p1_serial(D6, -1, true); 
+//SoftwareSerial p1_serial; // ESP8266 board support: 2.6.0(?)
+SoftwareSerial p1_serial(D6, -1, true); // ESP8266 board support: 2.3.0, 2.4.0, 2.7.0
 
 void p1_init() {
-  //p1_serial.begin(115200,SWSERIAL_8N1,D6,D6,true,256); // isBufCapacity is derived
-  //p1_serial.enableIntTx(false);
-  p1_serial.begin(115200); // ESP8266 must run at @160 MHz
+  //p1_serial.begin(115200,SWSERIAL_8N1,D6,D6,true,256); // ESP8266 board support: 2.6.0
+  //p1_serial.begin(115200,D6,-1,SWSERIAL_8N1,true,256); // ESP8266 board support: 2.6.0(?)
+  p1_serial.begin(115200); // ESP8266 board support: 2.3.0, 2.4.0, 2.7.0
+  
   p1_len= 0;
   p1_count_ok= 0;
   p1_count_err= 0;

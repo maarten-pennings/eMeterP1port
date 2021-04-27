@@ -60,11 +60,96 @@ It seems so bad that the current (April 2021) version of ESP8266 board package h
 
 |  ESP  | SwSer | pass | fail | count | rate |
 |:-----:|:-----:|:----:|:----:|:-----:|:----:|
+| 2.7.0 |  x.0  |   0  |  37  |   37  |   0% |
 | 2.4.0 |  1.0  |  50  |  16  |   66  |  76% |
 | 2.3.0 |  1.0  |  50  |   1  |   51  |  98% |
 
 
 ## Appendix 
+
+### ESP 2.7.0
+
+```
+Welcome to TestSwSer
+ver: ESP8266 board 2_7_0
+ver: SoftwareSerial 6.8.1
+cpu: init (160MHz)
+crc: init (test pass)
+p1 : init
+p1 : error: crc mismatch #D8F9=='EAA4'
+p1 : error: telegram has CRC error, discarding 755 bytes
+p1 : error: crc mismatch #98A9=='FEA1'
+p1 : error: telegram has CRC error, discarding 768 bytes
+p1 : error: crc mismatch #4D2B=='CDB2'
+p1 : error: telegram has CRC error, discarding 752 bytes
+p1 : error: crc mismatch #5A6E=='479A'
+p1 : error: telegram has CRC error, discarding 751 bytes
+p1 : error: timeout waiting for EOT, discarding 756 bytes
+p1 : error: crc mismatch #8D9F=='D1C7'
+p1 : error: telegram has CRC error, discarding 749 bytes
+p1 : error: crc mismatch #2BD6=='6FFF'
+p1 : error: telegram has CRC error, discarding 765 bytes
+p1 : error: crc mismatch #E575=='0C8C'
+p1 : error: telegram has CRC error, discarding 752 bytes
+p1 : error: crc mismatch #3DC1=='7E37'
+p1 : error: telegram has CRC error, discarding 764 bytes
+p1 : error: crc mismatch #C544=='78C8'
+p1 : error: telegram has CRC error, discarding 761 bytes
+p1 : error: crc mismatch #2BA1=='D7C5'
+p1 : error: telegram has CRC error, discarding 752 bytes
+p1 : error: crc mismatch #8EC0=='FB71'
+p1 : error: telegram has CRC error, discarding 754 bytes
+p1 : error: crc mismatch #9C15=='35F8'
+p1 : error: telegram has CRC error, discarding 759 bytes
+p1 : error: crc mismatch #2A76=='34BA'
+p1 : error: telegram has CRC error, discarding 762 bytes
+p1 : error: crc mismatch #D679=='43D8'
+p1 : error: telegram has CRC error, discarding 753 bytes
+p1 : error: crc mismatch #ACE1=='C2DC'
+p1 : error: telegram has CRC error, discarding 762 bytes
+p1 : error: crc mismatch #78CE=='ACC8'
+p1 : error: telegram has CRC error, discarding 745 bytes
+p1 : error: timeout waiting for EOT, discarding 763 bytes
+p1 : error: crc mismatch #F7FA=='2A9E'
+p1 : error: telegram has CRC error, discarding 767 bytes
+p1 : error: crc mismatch #D3EE=='4883'
+p1 : error: telegram has CRC error, discarding 760 bytes
+p1 : error: timeout waiting for EOT, discarding 754 bytes
+p1 : error: crc mismatch #730B=='EE45'
+p1 : error: telegram has CRC error, discarding 761 bytes
+p1 : error: crc mismatch #AE91=='CC6F'
+p1 : error: telegram has CRC error, discarding 753 bytes
+p1 : error: timeout waiting for EOT, discarding 760 bytes
+p1 : error: timeout waiting for EOT, discarding 742 bytes
+p1 : error: crc mismatch #0ACB=='13CF'
+p1 : error: telegram has CRC error, discarding 756 bytes
+p1 : error: timeout waiting for EOT, discarding 754 bytes
+p1 : error: crc mismatch #61B2=='CAD0'
+p1 : error: telegram has CRC error, discarding 771 bytes
+p1 : error: timeout waiting for EOT, discarding 745 bytes
+p1 : error: timeout waiting for EOT, discarding 756 bytes
+p1 : error: crc mismatch #258E=='460A'
+p1 : error: telegram has CRC error, discarding 755 bytes
+p1 : error: timeout waiting for EOT, discarding 751 bytes
+p1 : error: crc mismatch #EB72=='12F6'
+p1 : error: telegram has CRC error, discarding 755 bytes
+p1 : error: crc mismatch #9FE2=='74D0'
+p1 : error: telegram has CRC error, discarding 747 bytes
+p1 : error: crc mismatch #1A7E=='14AE'
+p1 : error: telegram has CRC error, discarding 769 bytes
+p1 : error: crc mismatch #9645=='B9E3'
+p1 : error: telegram has CRC error, discarding 765 bytes
+p1 : error: crc mismatch #85B5=='EA23'
+p1 : error: telegram has CRC error, discarding 753 bytes
+```
+
+### ESP 2.6.0
+
+Several compile errors (build also complains about git?).
+
+### ESP 2.5.0
+
+When installing, the downloaded BSP was correct.
 
 ### ESP 2.4.0
 
