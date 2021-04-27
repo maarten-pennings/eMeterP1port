@@ -58,5 +58,66 @@ It seems so bad that the current (April 2021) version of ESP8266 board package h
 
 ## Experiment
 
+```
+Welcome to TestSwSer
+ver: ESP8266 board 2_3_0
+ver: SoftwareSerial 1.0
+cpu: init (160MHz)
+crc: init (test pass)
+p1 : init
+p1 : telegram 1 received (864 bytes)
+p1 : telegram 2 received (864 bytes)
+p1 : telegram 3 received (864 bytes)
+p1 : telegram 4 received (864 bytes)
+p1 : telegram 5 received (864 bytes)
+p1 : telegram 6 received (864 bytes)
+p1 : error: crc mismatch #F9AF=='66A6'
+p1 : error: telegram has CRC error, discarding 863 bytes
+p1 : telegram 7 received (864 bytes)
+p1 : telegram 8 received (864 bytes)
+p1 : telegram 9 received (864 bytes)
+p1 : telegram 10 received (864 bytes)
+p1 : telegram 11 received (864 bytes)
+p1 : telegram 12 received (864 bytes)
+p1 : telegram 13 received (864 bytes)
+p1 : telegram 14 received (864 bytes)
+p1 : telegram 15 received (864 bytes)
+p1 : telegram 16 received (864 bytes)
+p1 : telegram 17 received (864 bytes)
+p1 : telegram 18 received (864 bytes)
+p1 : telegram 19 received (864 bytes)
+p1 : telegram 20 received (864 bytes)
+p1 : telegram 21 received (864 bytes)
+p1 : telegram 22 received (864 bytes)
+p1 : telegram 23 received (864 bytes)
+p1 : telegram 24 received (864 bytes)
+p1 : telegram 25 received (864 bytes)
+p1 : telegram 26 received (864 bytes)
+p1 : telegram 27 received (864 bytes)
+p1 : telegram 28 received (864 bytes)
+p1 : telegram 29 received (864 bytes)
+p1 : telegram 30 received (864 bytes)
+p1 : telegram 31 received (864 bytes)
+p1 : telegram 32 received (864 bytes)
+p1 : telegram 33 received (864 bytes)
+p1 : telegram 34 received (864 bytes)
+p1 : telegram 35 received (864 bytes)
+p1 : telegram 36 received (864 bytes)
+p1 : telegram 37 received (864 bytes)
+p1 : telegram 38 received (864 bytes)
+p1 : telegram 39 received (864 bytes)
+p1 : telegram 40 received (864 bytes)
+p1 : telegram 41 received (864 bytes)
+p1 : telegram 42 received (864 bytes)
+p1 : telegram 43 received (864 bytes)
+p1 : telegram 44 received (864 bytes)
+p1 : telegram 45 received (864 bytes)
+p1 : telegram 46 received (864 bytes)
+p1 : telegram 47 received (864 bytes)
+p1 : telegram 48 received (864 bytes)
+p1 : telegram 49 received (864 bytes)
+p1 : telegram 50 received (864 bytes)
+app: 51 intervals (of 10s): 50 pass, 1 fail
+```
 
 (end of doc)

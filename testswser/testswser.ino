@@ -6,9 +6,12 @@
 
 // CPU =================================================================
 
+
 extern "C" {
   #include "user_interface.h"
 }
+
+// Switched CPU to 160MHz
 void cpu_init() {
   system_update_cpu_freq(SYS_CPU_160MHZ);
   Serial.printf("cpu: init (%dMHz)\n", system_get_cpu_freq() );
@@ -17,6 +20,8 @@ void cpu_init() {
 
 // CRC =================================================================
 
+
+// Computes and returns the CRC16 of the bytes in buf[0..len).
 unsigned int crc_compute(const void *buf, int len) {
   unsigned int crc= 0;
   for (int pos = 0; pos < len; pos++)   {
@@ -36,6 +41,7 @@ unsigned int crc_compute(const void *buf, int len) {
   return crc;
 }
 
+// An example telegram
 const char * crc_testdata = "" \
   "/KFM5KAIFA-METER\r\n" \
   "\r\n" \
@@ -74,38 +80,41 @@ const char * crc_testdata = "" \
   "0-1:24.2.1(210418150000S)(23770.161*m3)\r\n" \
   "!BC26\r\n";
 
-// Quick and dirty test  
-void crc_test() {
-  int bang_pos = 857;
+// Quick and dirty test (returns 1 iff passed), using crc_testdata, by spoofing p1_buf
+int crc_test() {
+  int eotpos = 857;
   extern int p1_len;
   extern char p1_buf[]; 
 
-  p1_len= bang_pos+7;
+  p1_len= eotpos+7;
   memcpy(p1_buf,crc_testdata,p1_len);
-  Serial.printf("crc: ");
-  p1_bufcomplete(bang_pos);
+  return p1_crc_ok(eotpos);
 }
 
+// No real initialisation needed, only executes a CRC test
 void crc_init() {
-  crc_test();
-  Serial.printf("crc: init\n" );
+  int ok = crc_test();
+  Serial.printf("crc: init (test %s)\n", ok?"pass":"FAIL" );
 }
 
 
 // P1 ==================================================================
 
 
+// I patched SoftwareSerialVersion to publish its version number as EspSoftwareSerialVersion
 #ifndef EspSoftwareSerialVersion
 // I patched "C:\Users\maarten\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\2.7.4\libraries\SoftwareSerial\src\SoftwareSerial.h" to have a line like:   
 //   #define EspSoftwareSerialVersion "v6.8.5" // version copied from "..\library.properties"
 #define EspSoftwareSerialVersion "unknown"
-#warning Unknown version for EspSoftwareSerialVersion
+#warning Unknown version for EspSoftwareSerialVersion, needs a patch
 #endif
 
-#define  P1_BUF_SIZE 1024
-char     p1_buf[P1_BUF_SIZE+7]; // +6 allows "xxxx\r\n\0" after "!" - see p1_bufadd()
+#define  P1_BUF_SIZE 1500
+char     p1_buf[P1_BUF_SIZE+6]; // +6 allows "xxxx\r\n" after "!" - makes the test in p1_find_eot() address allocated bytes
 int      p1_len;
 uint32_t p1_time; // If p1_len>0 time of first char. If p1_len==0 time of last warning.
+uint32_t p1_count_ok; // number of received telegrams (with matching CRC)
+uint32_t p1_count_err; // number of corrupt telegrams
 
 //SoftwareSerial p1_serial;
 SoftwareSerial p1_serial(D6, -1, true); 
@@ -114,93 +123,158 @@ void p1_init() {
   //p1_serial.begin(115200,SWSERIAL_8N1,D6,D6,true,256); // isBufCapacity is derived
   //p1_serial.enableIntTx(false);
   p1_serial.begin(115200); // ESP8266 must run at @160 MHz
+  p1_len= 0;
+  p1_count_ok= 0;
+  p1_count_err= 0;
+  p1_time= millis(); // p1_len==0: time of last warning
   Serial.print("p1 : init\n");
 }
 
-void p1_begin() {
-  p1_len= 0;
-  Serial.print("p1 : listening\n");
-  p1_time= millis(); // p1_len==0: time of last warning
+// Find Begin-Of-Telegram (the '/' character), in p1_buf[0..len).
+// Returns position of the BOT in p1_buf (zero based) or -1 if not found.
+int p1_find_bot(int len) {
+  int i=0;
+  while( i<len && p1_buf[i]!='/' ) i++;
+  bool found= p1_buf[i]=='/';
+  if( found ) return i; else return -1;
 }
 
-void p1_bufcomplete(int bang_pos) {
-  if( p1_buf[bang_pos]!='!' ) Serial.printf("p1 : error in bang_pos\n");
-  unsigned int crc_computed= crc_compute(p1_buf, bang_pos+1); // Compute CRC from  ['/'..'!'] inclusive
-  char crc_in_telegram[5];
-  strncpy(crc_in_telegram, &p1_buf[bang_pos+1], 4); 
-  crc_in_telegram[4]='\0';
-  int crc_ok= strtoul( crc_in_telegram,NULL,16)==crc_computed;  
-  Serial.printf("p1 : telegram completed (%d bytes); crc #%04X=='%s' %s\n",p1_len,crc_computed,crc_in_telegram,crc_ok?"match":"error");
+// Find End-Of-Telegram (the '!XXXX\r\n'); to save time, searches in p1_buf[p1_len..p1_len+len) only.
+// Returns position of the EOT (of the '!') in p1_buf (zero based) or -1 if not found.
+int p1_find_eot(int len) {
+  int i= min(0,p1_len-6); // We actually look 6 back, in case the EOT is read in two chuncks
+  int i_end= p1_len+len; 
+  while( i<i_end && p1_buf[i]!='!' ) i++; // i_end could be P1_BUF_SIZE, so i could be P1_BUF_SIZE-1. p1_buf has 6 extra bytes
+  bool found= p1_buf[i]=='!' && isxdigit(p1_buf[i+1]) && isxdigit(p1_buf[i+2]) && isxdigit(p1_buf[i+3]) && isxdigit(p1_buf[i+4]) && p1_buf[i+5]=='\r' && p1_buf[i+6]=='\n';
+  if( found ) return i; else return -1;
 }
 
-void p1_bufadd(uint32_t now, int len) {
-  int i= p1_len;
-  p1_len+= len;
-  while( i<p1_len && p1_buf[i]!='!' ) i++;
-  int endmarker= p1_buf[i]=='!' && isxdigit(p1_buf[i+1]) && isxdigit(p1_buf[i+2]) && isxdigit(p1_buf[i+3]) && isxdigit(p1_buf[i+4]) && p1_buf[i+5]=='\r' && p1_buf[i+6]=='\n';
-  if( endmarker ) {
-    // state is receiving, and endmarker found
-    p1_bufcomplete(i);
-    p1_len= 0; // In theory there could be chars for the next telegram
-    p1_time= now; // p1_len==0: time of last warning
-  } else {
-    // state is receiving, and no endmarker found
-    if( p1_len==P1_BUF_SIZE ) {
-      Serial.printf("p1 : telegram overflow without EOT, discarding %d bytes\n",p1_len);
-      p1_len= 0;
-      p1_time= now; // p1_len==0: time of last warning  
-    } else {
-      // wait for more
-    }
+// Computes CRC16 of p1_buf[0..len). 
+// requirements: p1_buf[0] must be the BOT, p1_buf[len] must be the EOT, and p1[len+1..len+4] must store the transmitted CRC value.
+// Returns 1 if the computed CRC matches the transmitted one and 0 otherwise.
+int p1_crc_ok(int len) {
+  // Check BOT and EOT
+  if( p1_buf[0]  !='/' ) Serial.printf("p1 : should not happen: missing BOT\n");
+  if( p1_buf[len]!='!' ) Serial.printf("p1 : should not happen: missing EOT\n");
+  // Compute CRC
+  unsigned int crc_computed= crc_compute(p1_buf, len+1); // Compute CRC from  ['/'..'!'] inclusive
+  // Get transmitted CRC
+  char crc_transmitted[5];
+  strncpy(crc_transmitted, &p1_buf[len+1], 4); // four hex digits, starting after '!'
+  crc_transmitted[4]='\0';
+  // Compare
+  int crc_ok= strtoul( crc_transmitted,NULL,16)==crc_computed;  
+  if( ! crc_ok ) Serial.printf("p1 : warning: crc mismatch #%04X=='%s'\n",crc_computed,crc_transmitted);
+  // Return
+  return crc_ok;
+}
+
+// Called when a correct and complete telegram is received.
+// p1_buf[0..p1_len) contains a complete telegram, and p1_buf[0]=='/',  p1_buf[p1_len]=='!', and CRC matches.
+void p1_handle_ok() {
+  p1_count_ok++;
+  Serial.printf("p1 : telegram %u received (%d bytes)\n",p1_count_ok,p1_len);
+}
+
+#define P1_ERR_NOBOT    1 // bytes received without BOT
+#define P1_ERR_TIMEOUT  2 // timeout (>8sec) waiting for EOT
+#define P1_ERR_OVERFLOW 3 // telegram overflow; too many bytes received in p1_buf without an EOT
+#define P1_ERR_CRCERR   4 // BOT and EOT received, but CRC error
+
+// Called when a corrupt telegram received.
+void p1_handle_err(int err) {
+  p1_count_err++;
+  switch( err ) {
+    case P1_ERR_NOBOT :
+      Serial.printf("p1 : error: bytes without BOT, discarding %d bytes\n",p1_len);
+      break;
+    case P1_ERR_TIMEOUT :
+      Serial.printf("p1 : error: timeout waiting for EOT, discarding %d bytes\n",p1_len);
+      break;
+    case P1_ERR_OVERFLOW :
+      Serial.printf("p1 : error: telegram overflow without EOT, discarding %d bytes\n",p1_len);
+      break;
+    case P1_ERR_CRCERR :
+      Serial.printf("p1 : error: telegram has CRC error, discarding %d bytes\n",p1_len);
+      break;
+    default  :
+      Serial.printf("p1 : should not happen: unknown error tag (%d)\n",err);
+      break;
   }
 }
 
+// Must be periodically called; it reads the software serial, and calls p1_handle_xxx when a telegram is received
 void p1_read() {
   uint32_t now = millis();
+  // How many bytes to read?
   int num = 64; 
   if( num>P1_BUF_SIZE-p1_len ) num= P1_BUF_SIZE-p1_len;
+  // Read the bytes from the P1 port
   int len= p1_serial.readBytes( &p1_buf[p1_len], num );
-  if( p1_len==0 ) {
-    // state: idle, looking for the start of a telegram
-    if( len==0 ) {
-      // state is idle, and no bytes received
-      if( now-p1_time >10000 ) {
-        // "the data has to be sent by the P1 port to the P1 device every ten seconds"
-        Serial.printf("p1 : waiting for data\n");
-        p1_time = now; // p1_len==0: time of last warning
-      }
-    } else {
-      // state is idle, and something received
-      int i=0;
-      while( i<len && p1_buf[i]!='/' ) i++;
-      if( i==len ) {
-        Serial.printf("p1 : bytes without SOT, discarding %d bytes\n",len);
-        p1_time= now; // p1_len==0: time of last warning
-      } else {
-        memmove(&p1_buf[0],&p1_buf[i],len-i);
-        p1_time= now;  // p1_len>0: time of first char
-        p1_bufadd(now,len-i);
-      }
+  // Statemachine
+  if( p1_len==0 && len==0 ) {
+    // state: idle and no bytes received
+    if( now-p1_time >10000 ) {
+      // "the data has to be sent by the P1 port to the P1 device every ten seconds"
+      Serial.printf("p1 : waiting for data\n");
+      p1_time = now; // p1_len==0: time of last warning
     }
-  } else {
-    // state: receiving
-    if( len==0 ) {
-      // state is receiving, and no bytes received
-      if( now-p1_time > 8000 ) {
-        //  must complete a data transfer to the P1 device within eight seconds
-        Serial.printf("p1 : timeout waiting for EOT, discarding %d bytes\n",p1_len);
+  } else if( p1_len==0 && len>0 ) {
+    // state is idle, and some bytes received
+    int botpos= p1_find_bot(len);
+    if( botpos==-1 ) {
+      p1_len= len; // needed for error message in p1_handle_err()
+      p1_handle_err(P1_ERR_NOBOT); 
+      p1_len= 0;
+      p1_time= now; // p1_len==0: time of last warning
+    } else {
+      if( botpos!=0 ) { 
+        p1_len= len-botpos; // needed for error message in p1_handle_err()
+        p1_handle_err(P1_ERR_NOBOT);
+      }
+      // Shift [botpos..len) to [0..len-botpos) 
+      memmove(&p1_buf[0],&p1_buf[botpos],len-botpos);
+      p1_time= now;  // p1_len>0: time of first char
+      p1_len= len-botpos;
+      // We assume that num<<size-of-telegram; this means that the first read chunck cannot have EOT
+    }
+  } else if( p1_len>=0 && len==0 ) {
+    // state: receiving, and no bytes received
+    if( now-p1_time > 8000 ) {
+      //  must complete a data transfer to the P1 device within eight seconds
+      p1_handle_err(P1_ERR_TIMEOUT); 
+      p1_len= 0;
+      p1_time= now; // p1_len==0: time of last warning
+    }
+  } else if( p1_len>=0 && len>0 ) {
+    // state: receiving, and new bytes received
+    int eotpos= p1_find_eot(len);
+    p1_len+= len; // commit received bytes
+    if( eotpos==-1 ) {
+      // state is receiving, and no EOT found yet
+      if( p1_len==P1_BUF_SIZE ) {
+        p1_handle_err(P1_ERR_OVERFLOW);
         p1_len= 0;
-        p1_time= now; // p1_len==0: time of last warning
+        p1_time= now; // p1_len==0: time of last warning  
       }
     } else {
-      // state is receiving, and new bytes received
-      p1_bufadd(now,len);
-    }
+      // state: receiving, and EOT found
+      if( ! p1_crc_ok(eotpos) ) {
+        p1_handle_err(P1_ERR_CRCERR); 
+      } else {
+        p1_handle_ok();
+      }
+      p1_len= 0; // Assumption: there are no chars for the next telegram
+      p1_time= now; // p1_len==0: time of last warning
+    } 
   }
 }
 
 
 // APP =================================================================
+
+
+uint32_t started;
 
 void setup() {
   delay(2000);
@@ -211,9 +285,16 @@ void setup() {
   cpu_init();
   crc_init();
   p1_init();  
-  p1_begin();
+  started = millis();
 }
 
 void loop() {
   p1_read();
+  if( p1_count_ok==50 ) {
+    uint32_t span= millis()-started;
+    Serial.printf("app: %u intervals (of 10s): %u pass, %u fail\n", (span+5000)/10000, p1_count_ok, p1_count_err);
+    p1_count_ok= 0;
+    p1_count_err= 0;
+    started = millis();
+  }
 }
