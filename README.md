@@ -9,12 +9,27 @@ In the Netherlands, new electricity meters (e-meters) are being rolled out. Thes
 as [smart](https://nl.wikipedia.org/wiki/Slimme_meter). A smart meter is a digital (gas- or) electricy meter
 that can be remotely read. 
 
-The Dutch goverment has [standardized](https://www.netbeheernederland.nl/_upload/Files/Slimme_meter_15_91e8f3e526.pdf) smart meters. 
+The Dutch government has [standardized](https://www.netbeheernederland.nl/_upload/Files/Slimme_meter_15_91e8f3e526.pdf) smart meters. 
 One interesting aspect is that Dutch smart meters are required to have a so-called P1 port. Basically, this is a (transmit-only)
 serial port, that spits out the meter readings every 10 seconds.
 
 This project uses an ESP8266 to receive the readings, and to upload them to a webserver; 
 this could be a cloud service like [ThingSpeak](https://thingspeak.com/).
+
+![e-Meter system diagram](emeter-system.drawio.png)
+
+## Warning
+
+This project uses the Software Serial library (bit bang UART).
+Bit banging is time critical, and as a result, the bytes received are sometime wrong.
+Fortunately, the P1 telegram has a CRC16 checksum, so those errors are detected.
+
+When using ESP8288 board support 2.3.0, about 2% of the telegrams are corrupt.
+However, later versions have much higher levels of corruptions.
+See the [test](testswser.md) I did.
+
+Please note that this project very probably 
+**requires you to downgrade your ESP board support**.
 
 ## Wiring
 
