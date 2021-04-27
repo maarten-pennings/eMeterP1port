@@ -104,7 +104,7 @@ void crc_init() {
 // I patched SoftwareSerialVersion to publish its version number as EspSoftwareSerialVersion
 #ifndef EspSoftwareSerialVersion
 // I patched "C:\Users\maarten\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\2.7.4\libraries\SoftwareSerial\src\SoftwareSerial.h" to have a line like:   
-//   #define EspSoftwareSerialVersion "v6.8.5" // version copied from "..\library.properties"
+//   #define EspSoftwareSerialVersion "6.8.5" // version copied from "..\library.properties"
 #define EspSoftwareSerialVersion "unknown"
 #warning Unknown version for EspSoftwareSerialVersion, needs a patch
 #endif
@@ -164,7 +164,7 @@ int p1_crc_ok(int len) {
   crc_transmitted[4]='\0';
   // Compare
   int crc_ok= strtoul( crc_transmitted,NULL,16)==crc_computed;  
-  if( ! crc_ok ) Serial.printf("p1 : warning: crc mismatch #%04X=='%s'\n",crc_computed,crc_transmitted);
+  if( ! crc_ok ) Serial.printf("p1 : error: crc mismatch #%04X=='%s'\n",crc_computed,crc_transmitted);
   // Return
   return crc_ok;
 }
@@ -182,23 +182,23 @@ void p1_handle_ok() {
 #define P1_ERR_CRCERR   4 // BOT and EOT received, but CRC error
 
 // Called when a corrupt telegram received.
-void p1_handle_err(int err) {
+void p1_handle_err(int err, int discarded) {
   p1_count_err++;
   switch( err ) {
     case P1_ERR_NOBOT :
-      Serial.printf("p1 : error: bytes without BOT, discarding %d bytes\n",p1_len);
+      Serial.printf("p1 : error: bytes without BOT, discarding %d bytes\n",discarded);
       break;
     case P1_ERR_TIMEOUT :
-      Serial.printf("p1 : error: timeout waiting for EOT, discarding %d bytes\n",p1_len);
+      Serial.printf("p1 : error: timeout waiting for EOT, discarding %d bytes\n",discarded);
       break;
     case P1_ERR_OVERFLOW :
-      Serial.printf("p1 : error: telegram overflow without EOT, discarding %d bytes\n",p1_len);
+      Serial.printf("p1 : error: telegram overflow without EOT, discarding %d bytes\n",discarded);
       break;
     case P1_ERR_CRCERR :
-      Serial.printf("p1 : error: telegram has CRC error, discarding %d bytes\n",p1_len);
+      Serial.printf("p1 : error: telegram has CRC error, discarding %d bytes\n",discarded);
       break;
     default  :
-      Serial.printf("p1 : should not happen: unknown error tag (%d)\n",err);
+      Serial.printf("p1 : should not happen: unknown error tag (%d), discarding %d bytes\n",err, discarded);
       break;
   }
 }
@@ -223,15 +223,11 @@ void p1_read() {
     // state is idle, and some bytes received
     int botpos= p1_find_bot(len);
     if( botpos==-1 ) {
-      p1_len= len; // needed for error message in p1_handle_err()
-      p1_handle_err(P1_ERR_NOBOT); 
+      p1_handle_err(P1_ERR_NOBOT,len); 
       p1_len= 0;
       p1_time= now; // p1_len==0: time of last warning
     } else {
-      if( botpos!=0 ) { 
-        p1_len= len-botpos; // needed for error message in p1_handle_err()
-        p1_handle_err(P1_ERR_NOBOT);
-      }
+      if( botpos!=0 ) p1_handle_err(P1_ERR_NOBOT, botpos-1);
       // Shift [botpos..len) to [0..len-botpos) 
       memmove(&p1_buf[0],&p1_buf[botpos],len-botpos);
       p1_time= now;  // p1_len>0: time of first char
@@ -242,7 +238,7 @@ void p1_read() {
     // state: receiving, and no bytes received
     if( now-p1_time > 8000 ) {
       //  must complete a data transfer to the P1 device within eight seconds
-      p1_handle_err(P1_ERR_TIMEOUT); 
+      p1_handle_err(P1_ERR_TIMEOUT,p1_len); 
       p1_len= 0;
       p1_time= now; // p1_len==0: time of last warning
     }
@@ -253,18 +249,19 @@ void p1_read() {
     if( eotpos==-1 ) {
       // state is receiving, and no EOT found yet
       if( p1_len==P1_BUF_SIZE ) {
-        p1_handle_err(P1_ERR_OVERFLOW);
+        p1_handle_err(P1_ERR_OVERFLOW,p1_len);
         p1_len= 0;
         p1_time= now; // p1_len==0: time of last warning  
       }
     } else {
       // state: receiving, and EOT found
       if( ! p1_crc_ok(eotpos) ) {
-        p1_handle_err(P1_ERR_CRCERR); 
+        p1_handle_err(P1_ERR_CRCERR,p1_len); 
       } else {
         p1_handle_ok();
       }
-      p1_len= 0; // Assumption: there are no chars for the next telegram
+      if( eotpos+7!=p1_len ) p1_handle_err(P1_ERR_NOBOT, p1_len-(eotpos+7)); // Assumption: there is no BOT of a next telegram
+      p1_len= 0; 
       p1_time= now; // p1_len==0: time of last warning
     } 
   }
