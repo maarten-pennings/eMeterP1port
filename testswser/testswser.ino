@@ -1,4 +1,4 @@
-// testswser.ino -- Test the Sofwtare Serial library with a Dutch P1 port from an electricity meter
+// testswser.ino -- Test the Software Serial library with a Dutch P1 port from an electricity meter
 #include <core_version.h>   // ARDUINO_ESP8266_RELEASE
 #include <ctype.h>          // isxdigit()
 #include <SoftwareSerial.h>
@@ -91,7 +91,7 @@ int crc_test() {
   return p1_crc_ok(eotpos);
 }
 
-// No real initialisation needed, only executes a CRC test
+// No real initialization needed, only executes a CRC test
 void crc_init() {
   int ok = crc_test();
   Serial.printf("crc: init (test %s)\n", ok?"pass":"FAIL" );
@@ -143,7 +143,7 @@ int p1_find_bot(int len) {
 // Find End-Of-Telegram (the '!XXXX\r\n'); to save time, searches in p1_buf[p1_len..p1_len+len) only.
 // Returns position of the EOT (of the '!') in p1_buf (zero based) or -1 if not found.
 int p1_find_eot(int len) {
-  int i= min(0,p1_len-6); // We actually look 6 back, in case the EOT is read in two chuncks
+  int i= max(0,p1_len-6); // We actually look 6 back, in case the EOT is read in two chunks
   int i_end= p1_len+len; 
   while( i<i_end && p1_buf[i]!='!' ) i++; // i_end could be P1_BUF_SIZE, so i could be P1_BUF_SIZE-1. p1_buf has 6 extra bytes
   bool found= p1_buf[i]=='!' && isxdigit(p1_buf[i+1]) && isxdigit(p1_buf[i+2]) && isxdigit(p1_buf[i+3]) && isxdigit(p1_buf[i+4]) && p1_buf[i+5]=='\r' && p1_buf[i+6]=='\n';
@@ -212,7 +212,7 @@ void p1_read() {
   if( num>P1_BUF_SIZE-p1_len ) num= P1_BUF_SIZE-p1_len;
   // Read the bytes from the P1 port
   int len= p1_serial.readBytes( &p1_buf[p1_len], num );
-  // Statemachine
+  // State machine
   if( p1_len==0 && len==0 ) {
     // state: idle and no bytes received
     if( now-p1_time >10000 ) {
@@ -233,7 +233,7 @@ void p1_read() {
       memmove(&p1_buf[0],&p1_buf[botpos],len-botpos);
       p1_time= now;  // p1_len>0: time of first char
       p1_len= len-botpos;
-      // We assume that num<<size-of-telegram; this means that the first read chunck cannot have EOT
+      // We assume that num<<size-of-telegram; this means that the first read chunk cannot have EOT
     }
   } else if( p1_len>=0 && len==0 ) {
     // state: receiving, and no bytes received
