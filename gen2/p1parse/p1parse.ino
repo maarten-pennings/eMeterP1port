@@ -22,9 +22,83 @@
 // - the ESP uart support inverting the RX pin
 
 
-// TODO replace id and CRC
-#define TELEGRAM_EXAMPLE_1 \
-  "oops1\r\n" \
+#define TELE_EXAMPLE_1 \
+  "/KFM5KAIFA-METER\r\n" \
+  "\r\n" \
+  "1-3:0.2.8(42)\r\n" \
+  "0-0:1.0.0(220605191342S)\r\n" \
+  "0-0:96.1.1(456d795f73657269616c5f6e756d626572)\r\n" \
+  "1-0:1.8.1(019235.878*kWh)\r\n" \
+  "1-0:1.8.2(016881.373*kWh)\r\n" \
+  "1-0:2.8.1(000000.000*kWh)\r\n" \
+  "1-0:2.8.2(000000.000*kWh)\r\n" \
+  "0-0:96.14.0(0001)\r\n" \
+  "1-0:1.7.0(00.586*kW)\r\n" \
+  "1-0:2.7.0(00.000*kW)\r\n" \
+  "0-0:96.7.21(00020)\r\n" \
+  "0-0:96.7.9(00008)\r\n" \
+  "1-0:99.97.0(3)(0-0:96.7.19)(211209190618W)(0000003557*s)(210416081947S)(0000004676*s)(000101000011W)(2147483647*s)\r\n" \
+  "1-0:32.32.0(00000)\r\n" \
+  "1-0:52.32.0(00000)\r\n" \
+  "1-0:72.32.0(00000)\r\n" \
+  "1-0:32.36.0(00000)\r\n" \
+  "1-0:52.36.0(00000)\r\n" \
+  "1-0:72.36.0(00000)\r\n" \
+  "0-0:96.13.1()\r\n" \
+  "0-0:96.13.0()\r\n" \
+  "1-0:31.7.0(000*A)\r\n" \
+  "1-0:51.7.0(001*A)\r\n" \
+  "1-0:71.7.0(001*A)\r\n" \
+  "1-0:21.7.0(00.004*kW)\r\n" \
+  "1-0:22.7.0(00.000*kW)\r\n" \
+  "1-0:41.7.0(00.269*kW)\r\n" \
+  "1-0:42.7.0(00.000*kW)\r\n" \
+  "1-0:61.7.0(00.309*kW)\r\n" \
+  "1-0:62.7.0(00.000*kW)\r\n" \
+  "0-1:24.1.0(003)\r\n" \
+  "0-1:96.1.0(476d795f73657269616c5f6e756d626572)\r\n" \
+  "0-1:24.2.1(220605190000S)(16051.816*m3)\r\n" \
+  "!78CA\r\n"
+
+#define TELE_EXAMPLE_2 \
+  "/KFM5KAIFA-METER\r\n" \
+  "\r\n" \
+  "1-3:0.2.8(42)\r\n" \
+  "0-0:1.0.0(220605191351S)\r\n" \
+  "0-0:96.1.1(4530303033303030303034343234323134)\r\n" \
+  "1-0:1.8.1(019235.879*kWh)\r\n" \
+  "1-0:1.8.2(016881.373*kWh)\r\n" \
+  "1-0:2.8.1(000000.000*kWh)\r\n" \
+  "1-0:2.8.2(000000.000*kWh)\r\n" \
+  "0-0:96.14.0(0001)\r\n" \
+  "1-0:1.7.0(00.590*kW)\r\n" \
+  "1-0:2.7.0(00.000*kW)\r\n" \
+  "0-0:96.7.21(00020)\r\n" \
+  "0-0:96.7.9(00008)\r\n" \
+  "1-0:99.97.0(3)(0-0:96.7.19)(211209190618W)(0000003557*s)(210416081947S)(0000004676*s)(000101000011W)(2147483647*s)\r\n" \
+  "1-0:32.32.0(00000)\r\n" \
+  "1-0:52.32.0(00000)\r\n" \
+  "1-0:72.32.0(00000)\r\n" \
+  "1-0:32.36.0(00000)\r\n" \
+  "1-0:52.36.0(00000)\r\n" \
+  "1-0:72.36.0(00000)\r\n" \
+  "0-0:96.13.1()\r\n" \
+  "0-0:96.13.0()\r\n" \
+  "1-0:31.7.0(000*A)\r\n" \
+  "1-0:51.7.0(001*A)\r\n" \
+  "1-0:71.7.0(001*A)\r\n" \
+  "1-0:21.7.0(00.004*kW)\r\n" \
+  "1-0:22.7.0(00.000*kW)\r\n" \
+  "1-0:41.7.0(00.273*kW)\r\n" \
+  "1-0:42.7.0(00.000*kW)\r\n" \
+  "1-0:61.7.0(00.313*kW)\r\n" \
+  "1-0:62.7.0(00.000*kW)\r\n" \
+  "0-1:24.1.0(003)\r\n" \
+  "0-1:96.1.0(4730303032333430313934303336323135)\r\n" \
+  "0-1:24.2.1(220605190000S)(16051.816*m3)\r\n" \
+  "!A5F9\r\n"
+
+#define TELE_EXAMPLE_3 \
   "/KFM5KAIFA-METER\r\n" \
   "\r\n" \
   "1-3:0.2.8(42)\r\n" \
@@ -60,155 +134,134 @@
   "0-1:24.1.0(003)\r\n" \
   "0-1:96.1.0(476d795f73657269616c5f6e756d626572)\r\n" \
   "0-1:24.2.1(220605190000S)(16051.816*m3)\r\n" \
-  "!A62C\r\n" \
-  "oops2\r\n" 
+  "!A62C\r\n"
 
 
-// From http://domoticx.com/p1-poort-slimme-meter-hardware/
-#define TELEGRAM_EXAMPLE_2 \
-  "/XMX5LGBBFG10\r\n" \
-  "\r\n" \
-  "1-3:0.2.8(42)\r\n" \
-  "0-0:1.0.0(170108161107W)\r\n" \
-  "0-0:96.1.1(4530303331303033303031363939353135)\r\n" \
-  "1-0:1.8.1(002074.842*kWh)\r\n" \
-  "1-0:1.8.2(000881.383*kWh)\r\n" \
-  "1-0:2.8.1(000010.981*kWh)\r\n" \
-  "1-0:2.8.2(000028.031*kWh)\r\n" \
-  "0-0:96.14.0(0001)\r\n" \
-  "1-0:1.7.0(00.494*kW)\r\n" \
-  "1-0:2.7.0(00.000*kW)\r\n" \
-  "0-0:96.7.21(00004)\r\n" \
-  "0-0:96.7.9(00003)\r\n" \
-  "1-0:99.97.0(3)(0-0:96.7.19)(160315184219W)(0000000310*s)(160207164837W)(0000000981*s)(151118085623W)(0000502496*s)\r\n" \
-  "1-0:32.32.0(00000)\r\n" \
-  "1-0:32.36.0(00000)\r\n" \
-  "0-0:96.13.1()\r\n" \
-  "0-0:96.13.0()\r\n" \
-  "1-0:31.7.0(003*A)\r\n" \
-  "1-0:21.7.0(00.494*kW)\r\n" \
-  "1-0:22.7.0(00.000*kW)\r\n" \
-  "0-1:24.1.0(003)\r\n" \
-  "0-1:96.1.0(4730303139333430323231313938343135)\r\n" \
-  "0-1:24.2.1(170108160000W)(01234.000*m3)\r\n" \
-  "!63A1\r\n"
+
+// === FIELD ====================================================================================
+// A field describes an obis object that we are interested in.
 
 
-// A filter describes an obis object that we are interested in.
-//  name is a short name
+// Once a field in the telegram is parsed and passes all checks, 
+// its value is made available through Tele_Field.value[].
+// That is a string with storage size TELE_VALUE_SIZE.
+#define TELE_VALUE_SIZE   16
+
+
+// The following class represents one field, we make one instance per obis object that we are interested in.
+// All field properties are compile time constants, except `value`,
+// which becomes available after parsing a telegram successfully.
+//  key         ultra short name (1 character) used in printf-like format strings
+//  name        is the name (5-15 chars)
 //  description is description from standard, see https://www.netbeheernederland.nl/_upload/Files/Slimme_meter_15_a727fce1f1.pdf
-//  obis is referenec num from standard
-//  open_delim is the character just in front of the value (right most)
+//  obis        is obis code, like "1-0:1.8.1", from the standard
+//  open_delim  is the character just in front of the value (right most)
 //  close_delim is the character just after the value (right most)
-//  fieldname is a character that we use in defining the template upload string
-
-
-class Telegram_Filter {
+//  value       is filled with the actual parsed value (once parsing is successful) 
+class Tele_Field {
   public:
-    Telegram_Filter(const char * name, const char *description, const char *obis, char open_delim, char close_delim, char fieldname): 
-      name(name), description(description), obis(obis), open_delim(open_delim), close_delim(close_delim), fieldname(fieldname) {};
-    const char* name;
-    const char* description;
-    const char* obis;
-    char        open_delim;
-    char        close_delim;
-    char        fieldname; 
+    Tele_Field(char key, const char * name, const char *description, const char *obis, char open_delim, char close_delim): 
+      key(key), name(name), description(description), obis(obis), open_delim(open_delim), close_delim(close_delim), value("") {};
+    const char         key;
+    const char * const name;
+    const char * const description;
+    const char * const obis;
+    const char         open_delim;
+    const char         close_delim;
+          char         value[TELE_VALUE_SIZE];
 };
 
 
-Telegram_Filter telegram_filters[] = {
-  Telegram_Filter( "In-Day-kWh"   , "Meter Reading electricity delivered to client (Tariff 1)", "1-0:1.8.1"  , '(', '*', 'L' ),
-  Telegram_Filter( "In-Night-kWh" , "Meter Reading electricity delivered to client (Tariff 2)", "1-0:1.8.2"  , '(', '*', 'H' ),
-
-  Telegram_Filter( "Out-Day-kWh"  , "Meter Reading electricity delivered by client (Tariff 1)", "1-0:2.8.1"  , '(', '*', 'l' ),
-  Telegram_Filter( "Out-Night-kWh", "Meter Reading electricity delivered by client (Tariff 2)", "1-0:2.8.2"  , '(', '*', 'h' ),
-
-  Telegram_Filter( "Night1-Day2"  , "Tariff indicator electricity"                            , "0-0:96.14.0", '(', ')', 'I' ),
-
-  Telegram_Filter( "In-W"         , "Actual electricity power delivered (+P)"                 , "1-0:1.7.0"  , '(', '*', 'P' ),
-  Telegram_Filter( "Out-W"        , "Actual electricity power received (-P)"                  , "1-0:2.7.0"  , '(', '*', 'P' ),
-
-  Telegram_Filter( "Fails-short"  , "Number of power failures in any phase"                   , "0-0:96.7.21", '(', ')', 'F' ),
-  Telegram_Filter( "Fails-long"   , "Number of long power failures in any phase"              , "0-0:96.7.9" , '(', ')', 'f' ),
-
-//  Telegram_Filter( "In-L1-W"      , "Instantaneous power L1 (+P)"                             , "1-0:21.7.0" , '(', '*', 'A' ),
-//  Telegram_Filter( "Out-L1-W"     , "Instantaneous power L1 (-P)"                             , "1-0:22.7.0" , '(', '*', 'a' ),
-//  Telegram_Filter( "In-L2-W"      , "Instantaneous power L2 (+P)"                             , "1-0:41.7.0" , '(', '*', 'B' ),
-//  Telegram_Filter( "Out-L2-W"     , "Instantaneous power L2 (-P)"                             , "1-0:42.7.0" , '(', '*', 'b' ),
-//  Telegram_Filter( "In-L3-W"      , "Instantaneous power L3 (+P)"                             , "1-0:61.7.0" , '(', '*', 'C' ),
-//  Telegram_Filter( "Out-L3-W"     , "Instantaneous power L3 (-P)"                             , "1-0:62.7.0" , '(', '*', 'c' ),
-
-  Telegram_Filter( "Gas-m3"       , "Last 5-minute value gas delivered to client"             , "0-1:24.2.1" , '(', '*', 'G' ),
+// These are the fields that I'm interested in, feel free to modify
+Tele_Field tele_fields[] = {
+  Tele_Field( 'L', "Cons-Day-kWh"   , "Meter Reading electricity delivered to client (Tariff 1)", "1-0:1.8.1"  , '(', '*' ),
+  Tele_Field( 'H', "Cons-Night-kWh" , "Meter Reading electricity delivered to client (Tariff 2)", "1-0:1.8.2"  , '(', '*' ),
+                     
+  Tele_Field( 'l', "Prod-Day-kWh"   , "Meter Reading electricity delivered by client (Tariff 1)", "1-0:2.8.1"  , '(', '*' ),
+  Tele_Field( 'h', "Prod-Night-kWh" , "Meter Reading electricity delivered by client (Tariff 2)", "1-0:2.8.2"  , '(', '*' ),
+                     
+  Tele_Field( 'I', "Night1-Day2"    , "Tariff indicator electricity"                            , "0-0:96.14.0", '(', ')' ),
+                     
+  Tele_Field( 'P', "Cons-W"         , "Actual electricity power delivered (+P)"                 , "1-0:1.7.0"  , '(', '*' ),
+  Tele_Field( 'P', "Prod-W"         , "Actual electricity power received (-P)"                  , "1-0:2.7.0"  , '(', '*' ),
+                     
+  Tele_Field( 'F', "Fails-short"    , "Number of power failures in any phase"                   , "0-0:96.7.21", '(', ')' ),
+  Tele_Field( 'f', "Fails-long"     , "Number of long power failures in any phase"              , "0-0:96.7.9" , '(', ')' ),
+                     
+  Tele_Field( 'A', "Cons-L1-W"      , "Instantaneous power L1 (+P)"                             , "1-0:21.7.0" , '(', '*' ),
+  Tele_Field( 'a', "Prod-L1-W"      , "Instantaneous power L1 (-P)"                             , "1-0:22.7.0" , '(', '*' ),
+  Tele_Field( 'B', "Cons-L2-W"      , "Instantaneous power L2 (+P)"                             , "1-0:41.7.0" , '(', '*' ),
+  Tele_Field( 'b', "Prod-L2-W"      , "Instantaneous power L2 (-P)"                             , "1-0:42.7.0" , '(', '*' ),
+  Tele_Field( 'C', "Cons-L3-W"      , "Instantaneous power L3 (+P)"                             , "1-0:61.7.0" , '(', '*' ),
+  Tele_Field( 'c', "Prod-L3-W"      , "Instantaneous power L3 (-P)"                             , "1-0:62.7.0" , '(', '*' ),
+                     
+  Tele_Field( 'G', "Cons-Gas-m3"    , "Last 5-minute value gas delivered to client"             , "0-1:24.2.1" , '(', '*' ),
 };
 
 
-#define TELEGRAM_NUMFILTERS      ( sizeof(telegram_filters) / sizeof(Telegram_Filter) )
+// The total number of fields the parser should look for.
+#define TELE_NUMFIELDS      ( sizeof(tele_fields) / sizeof(Tele_Field) )
 
 
 
-#define TELEGRAM_VALUE_MAXCHAR   16
+// === PARSER ====================================================================================================
+// The parse is fed one character at a time (or -1 if there is no new character - this is needed to manage time-outs)
+// Once a complete telegram is received and approved (eg CRC), the results are published via tele_fields[].
 
-class Telegram_Object {
-  public:
-    bool present;
-    char value[TELEGRAM_VALUE_MAXCHAR];
+
+#define TELE_MAXWAIT_MS 10000  // telegram is repeated this many ms
+#define TELE_LINE_SIZE   2100  // telegram can have 1024 char message, each char encoded as HexHex
+
+
+// The internal states of the parser
+enum Tele_State {
+  TELE_STATE_IDLE, // waiting for the first character (of the header)
+  TELE_STATE_HEAD, // collecting header characters (until the whiteline)
+  TELE_STATE_BODY, // collecting all obis objects, if the match a field definition the value is copied there
+  TELE_STATE_CSUM  // collecting the CRC
 };
 
-Telegram_Object telegram_objects[TELEGRAM_NUMFILTERS];
 
-
-
-enum TelegramState {
-  idle,
-  head,
-  body,
-  csum
+// The add() function will return the abstract state of the parse
+enum Tele_Result {
+  TELE_RESULT_ERROR,      // a partial telegram is received but there was an error (timeout, syntax error, crc error, field missing).
+  TELE_RESULT_COLLECTING, // telegram data is still being collected, no errors have been found yet, but the telegram is also not yet complete.
+  TELE_RESULT_AVAILABLE,  // a complete telegram is received, its CRC matches, and all fields (as specified in tele_fields[]) are found.
 };
 
-#define TELEGRAM_MAXWAIT_MS 10000
-#define TELEGRAM_MAXLINELEN 128
 
-class Telegram {
+// The parser
+class Tele_Parser {
   public :
-    void clr_stat();
-    int  get_stat_fail();
-    int  get_stat_good();
-    void set_idle();
-    void add(int ch);
+    void          begin();
+    Tele_Result   add(int ch);
   private:
-    void update_crc(int len);
-    bool header_ok();
-    bool bodyln_ok();
-    bool csumln_ok();
+    void          set_state_idle();
+    void          set_state_head();
+    void          set_state_body();
+    void          set_state_csum();
   private:
-    TelegramState _state;
+    void          update_crc(int len);
+    bool          header_ok();
+    bool          bodyln_ok();
+    bool          csumln_ok();
+  private:
+    Tele_State    _state;
     uint32_t      _time;
-    char          _data[TELEGRAM_MAXLINELEN];
+    char          _data[TELE_LINE_SIZE];
     int           _len;
     unsigned int  _crc;
-    int           _numfail;
-    int           _numgood;
 };
 
 
-
-void Telegram::clr_stat() {
-  _numfail = 0;
-  _numgood = 0;
+// Sets the parse to an intial state
+void Tele_Parser::begin() {
+  set_state_idle();
 }
 
 
-int Telegram::get_stat_fail() {
-  return _numfail;
-}
-
-
-int Telegram::get_stat_good() {
-  return _numgood;
-}
-
-
-void Telegram::update_crc(int len) {
+// Updates the `_crc` with the bytes in `_data`, op to `len`.
+void Tele_Parser::update_crc(int len) {
   for( int pos=0; pos<len; pos++ ) {
     _crc ^= _data[pos];
     for(int i=8; i!=0; i--) {
@@ -220,15 +273,43 @@ void Telegram::update_crc(int len) {
 }
 
 
-// Forces telegram parse to the idel state
-void Telegram::set_idle() {
-  _state = idle;
-  _time = millis(); // in idle: time of last error; otherwise time of first char in telegram
-  _len = 0; // in idle: number of discarded bytes (before header); otherwise num of chars in current line
+// Forces telegram parse to the idle state
+void Tele_Parser::set_state_idle() {
+  _state = TELE_STATE_IDLE;
+  _time = millis(); // in idle: time of last error
+  _len = 0; // in idle: number of discarded bytes (before header)
 }
 
 
-bool Telegram::header_ok() {
+// Forces telegram parse to the head state
+void Tele_Parser::set_state_head() {
+  _state= TELE_STATE_HEAD;
+  _time= millis(); // time of first char in telegram
+  _len= 0; // num of chars in current line
+  _crc= 0x0000; // initial value for checksum
+}
+
+
+// Forces telegram parse to the body state
+void Tele_Parser::set_state_body() {
+  _state = TELE_STATE_BODY;
+  // _time= millis(); // do not reset time of first char in telegram
+  _len= 0; // num of chars in current line
+}
+
+
+// Forces telegram parse to the check sum state
+void Tele_Parser::set_state_csum() {
+  _state = TELE_STATE_CSUM;
+  // _time= millis(); // do not reset time of first char in telegram
+  // _len = 0; // do not reset, was already collecting as body line
+}
+
+
+// Returns true iff the `_data[0.._len)` is a valid header.
+// Prints and error if not.
+// Updates CRC with header bytes, clears field values
+bool Tele_Parser::header_ok() {
   // "/KFM5KAIFA-METER<CR><LF><CR><LF>"
   bool ok = _len>8 && _data[0]=='/' && _data[4]=='5' && _data[_len-4]=='\r' && _data[_len-3]=='\n' && _data[_len-2]=='\r' && _data[_len-1]=='\n';
   if( !ok ) {
@@ -241,15 +322,19 @@ bool Telegram::header_ok() {
   //_data[_len-4]='\0';
   //Serial.printf("tele: header received '%s'\n",_data);
 
-  for( int i=0; i<TELEGRAM_NUMFILTERS; i++ ) {
-    telegram_objects[i].present = false; // flag all objects as not found
+  // Flag all fields as not found
+  for( int i=0; i<TELE_NUMFIELDS; i++ ) {
+    tele_fields[i].value[0] = '\0'; 
   }
   
   return true;
 }
 
 
-bool Telegram::bodyln_ok() {
+// Returns true iff the `_data[0.._len)` is a body line (obis object).
+// Prints and error if not.
+// Updates CRC with received bytes, sets field value if it matches one of the fields
+bool Tele_Parser::bodyln_ok() {
   // "1-0:1.8.1(012345.678*kWh)<CR><LF>"
   bool ok = _len>2 && _data[_len-2]=='\r' && _data[_len-1]=='\n';
   if( !ok ) {
@@ -262,37 +347,40 @@ bool Telegram::bodyln_ok() {
   _data[_len-2]='\0';
   //Serial.printf("tele: body line received '%s'\n",_data);
 
-  for( int i=0; i<TELEGRAM_NUMFILTERS; i++ ) {
-    if( strncmp(_data, telegram_filters[i].obis, strlen(telegram_filters[i].obis))==0 ) {
-      char * pos_open_delim  = strrchr( _data, telegram_filters[i].open_delim  );
+  for( int i=0; i<TELE_NUMFIELDS; i++ ) {
+    if( strncmp(_data, tele_fields[i].obis, strlen(tele_fields[i].obis))==0 ) {
+      char * pos_open_delim  = strrchr( _data, tele_fields[i].open_delim  );
       if( pos_open_delim==0 ) {
-        Serial.printf("tele: ERROR body line '%s' could not find open delim '%c'\n",_data,telegram_filters[i].open_delim);
+        Serial.printf("tele: ERROR body line '%s' could not find open delim '%c'\n",_data,tele_fields[i].open_delim);
         return false;
       }
-      char * pos_close_delim = strrchr( _data, telegram_filters[i].close_delim );
+      char * pos_close_delim = strrchr( _data, tele_fields[i].close_delim );
       if( pos_open_delim==0 ) {
-        Serial.printf("tele: ERROR body line '%s' could not find close delim '%c'\n",_data,telegram_filters[i].close_delim);
+        Serial.printf("tele: ERROR body line '%s' could not find close delim '%c'\n",_data,tele_fields[i].close_delim);
         return false;
       }
 
       int len = pos_close_delim - pos_open_delim - 1;
-      if( len<1 || len>=TELEGRAM_VALUE_MAXCHAR ) {
-        Serial.printf("tele: ERROR body line '%s' datwaidth too large (%d)\n",_data,len);
+      if( len<=0 || len>=TELE_VALUE_SIZE ) { 
+        // 0 len not allowed (and empty value means not found)
+        // TELE_VALUE_SIZE no allowed (we need to append the terminating zero)
+        Serial.printf("tele: ERROR body line '%s' data width mismatch (%d)\n",_data,len);
         return false;
       }
       
-      telegram_objects[i].present = true;
-      memcpy( telegram_objects[i].value, pos_open_delim+1, len );
-      telegram_objects[i].value[len] - '0';
+      memcpy( tele_fields[i].value, pos_open_delim+1, len );
+      tele_fields[i].value[len] = '0';
 
-      //Serial.printf("tele: %s %s\n",telegram_filters[i].name, telegram_objects[i].value);
+      //Serial.printf("tele: %s %s\n",tele_fields[i].name, tele_fields[i].value);
     }
   }
   return true;
 }
 
 
-bool Telegram::csumln_ok() {
+// Returns true iff the `_data[0.._len)` is a valid crc line, the CRC matches that of all collected bytes, and all field are found.
+// Prints and error if not.
+bool Tele_Parser::csumln_ok() {
   // "!70CE<CR><LF>"
   bool ok = _len==7 && _data[0]=='!' && isxdigit(_data[1]) && isxdigit(_data[2]) && isxdigit(_data[3]) && isxdigit(_data[4]) && _data[5]=='\r' && _data[6]=='\n';
   if( !ok ) {
@@ -317,10 +405,10 @@ bool Telegram::csumln_ok() {
     return false;
   }
 
-  // Check if all obkects have values
-  for( int i=0; i<TELEGRAM_NUMFILTERS; i++ ) {
-    if( ! telegram_objects[i].present ) {
-      Serial.printf("tele: missing field '%s' with code '%s'\n",telegram_filters[i].name,telegram_filters[i].obis);
+  // Check if all objects have values
+  for( int i=0; i<TELE_NUMFIELDS; i++ ) {
+    if( tele_fields[i].value[0] == '\0' ) {
+      Serial.printf("tele: missing field '%s' with code '%s'\n",tele_fields[i].name,tele_fields[i].obis);
       return false;
     }
   }
@@ -332,148 +420,136 @@ bool Telegram::csumln_ok() {
 }
 
 
-void Telegram::add(int ch) {
-  // if( ch=='\n') Serial.printf("\\n\n[%d,%d]",_state,_len);
-  // else if( ch=='\r') Serial.printf("\\r",ch);
-  // else if( ch!=-1) Serial.printf("%c",ch);
+// Feed the next character from the emeter into the parser. Feed -1 if no char received (this checks timeouts).
+// The parse will keep state of where it is.
+// It returns TELE_RESULT_AVAILABLE when a complete telegram is received, its CRC matches, and all fields are found.
+// It returns TELE_RESULT_ERROR when a partial telegram is received but there was an error (timeout, syntax error, crc error, field missing).
+// It returns TELE_RESULT_COLLECTING when telegram data is being collected, no errors have been found, but it is also not complete yet.
+Tele_Result Tele_Parser::add(int ch) {
+  Tele_Result res = TELE_RESULT_COLLECTING;
+  // if( ch=='\n') Serial.printf("\\n\n[%d,%d]",_state,_len+1); else if( ch=='\r') Serial.printf("\\r",ch); else if( ch==-1) {} else if( ch>'\x20' && ch<'\x7f') Serial.printf("%c",ch); else Serial.printf("\\x%x",(uint8_t)ch);
 
-  // too long no data?
+  // Too long no data?
   if( ch<0 ) {
-    if( millis() - _time > TELEGRAM_MAXWAIT_MS ) {
-      if( _len>0 ) Serial.printf("tele: ... %d bytes of telegram data discarded, too long no data\n",_len);
-      else Serial.printf("tele: ERROR no telegram data received\n");
-      _numfail++;
-      set_idle();
+    if( millis() - _time > TELE_MAXWAIT_MS ) {
+      if( _len>0 ) Serial.printf("tele: ... timeout (%d bytes discarded)\n",_len); else Serial.printf("tele: ERROR timeout\n");
+      set_state_idle();
+      res = TELE_RESULT_ERROR;
     }
-    return;
+    return res;
   }
 
   // Waiting for header
-  if( _state==idle ) {
+  if( _state==TELE_STATE_IDLE ) {
     if( ch=='/' ) {
       // Start of header. Init data collection, reset time to start of telegram
-      if( _len>0 ) { Serial.printf("tele: ... %d bytes of telegram data discarded, now header\n",_len); _numfail++; }
-      _len= 0;
+      if( _len>0 ) { Serial.printf("tele: ... found header (%d bytes discarded)\n",_len); res=TELE_RESULT_ERROR; }
+      set_state_head();
       _data[_len++]= ch;
-      _time= millis();
-      _state= head;
-      _crc= 0x0000; // initial value
     } else {
       // bytes come in without header
       if( _len==0 ) Serial.printf("tele: ERROR data without header ...\n");
       _len++;
     }
-    return;
+    return res;
   }
 
-  // Does character fit?
-  if( _len==TELEGRAM_MAXLINELEN ) {
+  // Does character fit in line buffer?
+  if( _len==TELE_LINE_SIZE ) {
     Serial.printf("tele: ERROR line too long (%d)\n",_len);
-    _numfail++;
-    set_idle();
-    return;
+    res= TELE_RESULT_ERROR; 
+    set_state_idle();
+    return res;
   }
   _data[_len++]= ch;
- 
+
+  // Switch state if a special char comes in
   switch( _state ) {
-  case head:
+  case TELE_STATE_HEAD:
     // Get e.g. "/KFM5KAIFA-METER<CR><LF><CR><LF>"
     if( _len>3 && _data[_len-3]=='\n' && _data[_len-1]=='\n' ) { // include whiteline
       // Header is complete (including whiteline)
       if( header_ok() ) {
-        _state= body;
-        _len= 0;
+        set_state_body();
       } else {
-        _numfail++;
-        set_idle();
+        res= TELE_RESULT_ERROR; 
+        set_state_idle();
       }
     }  
     break;
     
-  case body:
+  case TELE_STATE_BODY:
     // Get e.g. "1-0:1.8.1(012345.678*kWh)<CR><LF>"
     if( ch=='!' ) {
-      _state = csum;
+      set_state_csum();
     } else if( ch=='\n' ) {
-      // Bodyline is complete
+      // Body line is complete
       if( bodyln_ok() ) {
         _len= 0;
       } else {
-        _numfail++;
-       set_idle();
+       res= TELE_RESULT_ERROR; 
+       set_state_idle();
       }
     }
     break;
     
-  case csum:
+  case TELE_STATE_CSUM:
     // get e.g. "!70CE<CR><LF>"
     if( ch=='\n' ) {
       // CRC is complete
-      if( csumln_ok() ) _numgood++; else _numfail++;
-      set_idle();
+      if( csumln_ok() ) res=TELE_RESULT_AVAILABLE; else res=TELE_RESULT_ERROR; 
+      set_state_idle();
     }
     break;
   
   } // switch
+  return res;
 }
 
 
-Telegram telegram;
+// === APP ============================================================================================
+
+
+// use real serial port or spoof prerecorded data
+#if 0
+  #define SERIAL_READ() Serial.read()
+#else 
+  // An @ in the string causes a wait of 1000ms
+  const char *s = "noise" TELE_EXAMPLE_1 "@@@@@@@@@@@@much\r\nmore noise@@@@@@@@@@@@" TELE_EXAMPLE_2 TELE_EXAMPLE_3;
+  int SERIAL_READ() {
+    if( *s=='\0' ) { delay(1000); /* end of s, no inc */ return -1; }
+    else if( *s=='@' ) { delay(1000); s++; return -1; }
+    else { delay(1); return *s++; }
+  }
+#endif
+
+
+Tele_Parser parser;
+int app_fail;
 
 void setup() {
   Serial.begin(115200, SERIAL_8N1, SERIAL_FULL);
   do delay(250); while( !Serial );
   Serial.printf("\n\n\nWelcome to p1read\n");
 
-  Serial.flush();
   USC0(UART0) = USC0(UART0) | BIT(UCRXI);
+  Serial.flush();
   Serial.printf("seri: RX inverted\n");
 
   Serial.printf("\n");
-  telegram.set_idle();
+  app_fail = 0;
+  parser.begin();
 }
 
-
-#if 1
-const char *s = TELEGRAM_EXAMPLE_1 TELEGRAM_EXAMPLE_2 ;
-int ix = -25;
 
 void loop() {
-  if( ix<0 ) {
-    delay(1000);
-    telegram.add(-1);
-    ix++;
-  }
-  if( ix<strlen(s) ) {
-    int ch= s[ix++]; // Serial.read();
-    if( ch!=-1 ) telegram.add(ch);
-  }
-  if( telegram.get_stat_good()>0 ) {
-    Serial.printf("tele: fail %d good %d\n",telegram.get_stat_fail(),telegram.get_stat_good() );
-    for( int i=0; i<TELEGRAM_NUMFILTERS; i++ ) {
-      Serial.printf("  %s %s\n",telegram_filters[i].name, telegram_objects[i].value);
+  Tele_Result res = parser.add(SERIAL_READ());
+  if( res==TELE_RESULT_ERROR ) app_fail++;
+  if( res==TELE_RESULT_AVAILABLE ) {
+    Serial.printf("tele: available\n  %-15s %d\n","Num-Fail",app_fail );
+    for( int i=0; i<TELE_NUMFIELDS; i++ ) {
+      Serial.printf("  %-15s %s\n",tele_fields[i].name, tele_fields[i].value);
     }
-    telegram.clr_stat();
+    app_fail = 0;
   }
-  delay(1);
 }
-#else
-void loop() {
-  telegram.add(Serial.read());
-
-  if( telegram.get_stat_good()>0 ) {
-    Serial.printf("tele: fail %d good %d\n",telegram.get_stat_fail(),telegram.get_stat_good() );
-    for( int i=0; i<TELEGRAM_NUMFILTERS; i++ ) {
-      Serial.printf("  %-15s %s\n",telegram_filters[i].name, telegram_objects[i].value);
-    }
-    telegram.clr_stat();
-  }
-
-}
-#endif
-
-/*
-
-- check timeout in all states
-
-*/
