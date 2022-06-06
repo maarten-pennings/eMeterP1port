@@ -161,7 +161,7 @@
 class Tele_Field {
   public:
     Tele_Field(char key, const char * name, const char *description, const char *obis, char open_delim, char close_delim): 
-      key(key), name(name), description(description), obis(obis), open_delim(open_delim), close_delim(close_delim), value("") {};
+      key(key), name(name), description(description), obis(obis), open_delim(open_delim), close_delim(close_delim) {};
     const char         key;
     const char * const name;
     const char * const description;
@@ -182,18 +182,18 @@ Tele_Field tele_fields[] = {
                      
   Tele_Field( 'I', "Night1-Day2"    , "Tariff indicator electricity"                            , "0-0:96.14.0", '(', ')' ),
                      
-  Tele_Field( 'P', "Cons-W"         , "Actual electricity power delivered (+P)"                 , "1-0:1.7.0"  , '(', '*' ),
-  Tele_Field( 'P', "Prod-W"         , "Actual electricity power received (-P)"                  , "1-0:2.7.0"  , '(', '*' ),
+  Tele_Field( 'P', "Cons-kW"        , "Actual electricity power delivered (+P)"                 , "1-0:1.7.0"  , '(', '*' ),
+  Tele_Field( 'P', "Prod-kW"        , "Actual electricity power received (-P)"                  , "1-0:2.7.0"  , '(', '*' ),
                      
-  Tele_Field( 'F', "Fails-short"    , "Number of power failures in any phase"                   , "0-0:96.7.21", '(', ')' ),
-  Tele_Field( 'f', "Fails-long"     , "Number of long power failures in any phase"              , "0-0:96.7.9" , '(', ')' ),
+  Tele_Field( 'F', "Fails-short-#"  , "Number of power failures in any phase"                   , "0-0:96.7.21", '(', ')' ),
+  Tele_Field( 'f', "Fails-long-#"   , "Number of long power failures in any phase"              , "0-0:96.7.9" , '(', ')' ),
                      
-  Tele_Field( 'A', "Cons-L1-W"      , "Instantaneous power L1 (+P)"                             , "1-0:21.7.0" , '(', '*' ),
-  Tele_Field( 'a', "Prod-L1-W"      , "Instantaneous power L1 (-P)"                             , "1-0:22.7.0" , '(', '*' ),
-  Tele_Field( 'B', "Cons-L2-W"      , "Instantaneous power L2 (+P)"                             , "1-0:41.7.0" , '(', '*' ),
-  Tele_Field( 'b', "Prod-L2-W"      , "Instantaneous power L2 (-P)"                             , "1-0:42.7.0" , '(', '*' ),
-  Tele_Field( 'C', "Cons-L3-W"      , "Instantaneous power L3 (+P)"                             , "1-0:61.7.0" , '(', '*' ),
-  Tele_Field( 'c', "Prod-L3-W"      , "Instantaneous power L3 (-P)"                             , "1-0:62.7.0" , '(', '*' ),
+  Tele_Field( 'A', "Cons-L1-kW"     , "Instantaneous power L1 (+P)"                             , "1-0:21.7.0" , '(', '*' ),
+  Tele_Field( 'a', "Prod-L1-kW"     , "Instantaneous power L1 (-P)"                             , "1-0:22.7.0" , '(', '*' ),
+  Tele_Field( 'B', "Cons-L2-kW"     , "Instantaneous power L2 (+P)"                             , "1-0:41.7.0" , '(', '*' ),
+  Tele_Field( 'b', "Prod-L2-kW"     , "Instantaneous power L2 (-P)"                             , "1-0:42.7.0" , '(', '*' ),
+  Tele_Field( 'C', "Cons-L3-kW"     , "Instantaneous power L3 (+P)"                             , "1-0:61.7.0" , '(', '*' ),
+  Tele_Field( 'c', "Prod-L3-kW"     , "Instantaneous power L3 (-P)"                             , "1-0:62.7.0" , '(', '*' ),
                      
   Tele_Field( 'G', "Cons-Gas-m3"    , "Last 5-minute value gas delivered to client"             , "0-1:24.2.1" , '(', '*' ),
 };
@@ -369,7 +369,7 @@ bool Tele_Parser::bodyln_ok() {
       }
       
       memcpy( tele_fields[i].value, pos_open_delim+1, len );
-      tele_fields[i].value[len] = '0';
+      tele_fields[i].value[len] = '\0';
 
       //Serial.printf("tele: %s %s\n",tele_fields[i].name, tele_fields[i].value);
     }
