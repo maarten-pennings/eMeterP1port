@@ -41,13 +41,13 @@ class Tele_Field {
 
 // These are the fields that I'm interested in, feel free to modify
 static Tele_Field tele_fields[TELE_NUMFIELDS] = {
-  /* post1 */ Tele_Field( 'H', "Cons-Day-kWh"   , "Meter Reading electricity delivered to client (Tariff 1)", "1-0:1.8.1"  , '(', '*' ),
-  /* post2 */ Tele_Field( 'L', "Cons-Night-kWh" , "Meter Reading electricity delivered to client (Tariff 2)", "1-0:1.8.2"  , '(', '*' ),
+  /* post1 */ Tele_Field( 'L', "Cons-Night1-kWh", "Meter Reading electricity delivered to client (Tariff 1)", "1-0:1.8.1"  , '(', '*' ),
+  /* post2 */ Tele_Field( 'H', "Cons-Day2-kWh"  , "Meter Reading electricity delivered to client (Tariff 2)", "1-0:1.8.2"  , '(', '*' ),
                      
-  /* post3 */ Tele_Field( 'h', "Prod-Day-kWh"   , "Meter Reading electricity delivered by client (Tariff 1)", "1-0:2.8.1"  , '(', '*' ),
-  /* post4 */ Tele_Field( 'l', "Prod-Night-kWh" , "Meter Reading electricity delivered by client (Tariff 2)", "1-0:2.8.2"  , '(', '*' ),
+  /* post3 */ Tele_Field( 'l', "Prod-Night1-kWh", "Meter Reading electricity delivered by client (Tariff 1)", "1-0:2.8.1"  , '(', '*' ),
+  /* post4 */ Tele_Field( 'h', "Prod-Day2-kWh"  , "Meter Reading electricity delivered by client (Tariff 2)", "1-0:2.8.2"  , '(', '*' ),
                      
-              Tele_Field( 'I', "Night1L-Day2H"  , "Tariff indicator electricity"                            , "0-0:96.14.0", '(', ')' ),
+              Tele_Field( 'I', "Night1-Day2"    , "Tariff indicator electricity"                            , "0-0:96.14.0", '(', ')' ),
                      
   /* post5 */ Tele_Field( 'P', "Cons-kW"        , "Actual electricity power delivered (+P)"                 , "1-0:1.7.0"  , '(', '*' ),
   /* post6 */ Tele_Field( 'p', "Prod-kW"        , "Actual electricity power received (-P)"                  , "1-0:2.7.0"  , '(', '*' ),

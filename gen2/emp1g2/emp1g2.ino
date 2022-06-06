@@ -81,13 +81,13 @@ NvmField CfgEmp1Fields[] = {
   {"Server 1 (post)" , ""                                                  ,  0, "The eMP1 may publish data using the 'POST' protocol. Supply the server, URL and the post body (in two chunks), or leave blank. " },
   {"postserver"      , "api.thingspeak.com"                                , 32, "The name of the server to which measurements are send via POST (empty for none)."},
   {"posturl"         , "/update"                                           , 32, "The URL for the POST server."},
-  {"postbody1"       , "field1=%L&field2=%H&field3=%P&field4=%I&field5=%D&", 64, "Body part 1 HELP: %H=Cons-Day-kWh, %L=Cons-Night-kWh, %h=Prod-Day-kWh, %l=Prod-Night-kWh, %I=Night1-Day2, %P=Cons-kW, %p=Prod-kW, %F=Fails-short-#, %f=Fails-long-#."},
-  {"postbody2"       , "field6=%G&field7=%T&field8=%E&key=MyWriteKeyXXXXXX", 64, "Body part 2 HELP: %A=Cons-L1-kW, %a=Prod-L1-kW, %B=Cons-L2-kW, %b=Prod-L2-kW, %C=Cons-L3-kW, %c=Prod-L3-kW, %G=Cons-Gas-m3, %%=%, add . to skip dot (%.P)."},
+  {"postbody1"       , "field1=%L&field2=%H&field3=%l&field4=%h&field5=%P&", 64, "Body part 1 HELP: %L=Cons-Night1-kWh, %H=Cons-Day2-kWh, %l=Prod-Night1-kWh, %h=Prod-Day2-kWh, %I=Night1-Day2, %P=Cons-kW, %p=Prod-kW, %F=Fails-short-#, %f=Fails-long-#."},
+  {"postbody2"       , "field6=%p&field7=%F&field8=%E&key=MyWriteKeyXXXXXX", 64, "Body part 2 HELP: %A=Cons-L1-kW, %a=Prod-L1-kW, %B=Cons-L2-kW, %b=Prod-L2-kW, %C=Cons-L3-kW, %c=Prod-L3-kW, %G=Cons-Gas-m3, %%=%, add . to skip dot (%.P)."},
   {"postperiod"      , "60000"                                             ,  8, "The number of milliseconds between post's. "},
 
   {"Server 2 (get)"  , ""                                                  ,  0, "The eMP1 may publish data using the 'GET' protocol. Supply the server and URL, or leave blank. " },
   {"getserver"       , "nwebmsg.fritz.box"  /* "192.168.179.74" */         , 32, "The name of the server to which measurements are send via GET (empty for none)."},
-  {"geturl"          , "/?msg=%p&mode=right"                               , 32, "The URL for the GET server [HELP: use % as in postbody]."},
+  {"geturl"          , "/?msg=%.P&mode=right"                               , 32, "The URL for the GET server [HELP: use % as in postbody]."},
   {"getperiod"       , "1000"                                              ,  8, "The number of milliseconds between get's. "},
 
   {0                 , 0                                                   ,  0, 0},  
@@ -340,7 +340,7 @@ void loop() {
   if( res==TELE_RESULT_AVAILABLE ) {
     // Serial.printf("emp1: available\n");
     led_on();
-    //for( int i=0; i<TELE_NUMFIELDS; i++ ) Serial.printf("  %-15s %s\n",tele_field_name(i), tele_field_value(i));
+    for( int i=0; i<TELE_NUMFIELDS; i++ ) Serial.printf("  %-15s %s\n",tele_field_name(i), tele_field_value(i));
     if( now-app_last_post > cfg_postperiod ) {
       http_post();
       app_last_post = now;
