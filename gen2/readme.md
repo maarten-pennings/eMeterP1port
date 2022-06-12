@@ -1,7 +1,9 @@
 # Generation 2
 
 This is generation 2 of the eMeterP1port firmware.
-Two reasons. Firstly, generation 1 stopped working after a power outage.
+
+There are two reasons for a second generation. 
+Firstly, generation 1 stopped working after a power outage.
 Root cause was a a new object in the telegram (about the power outage) that caused a line buffer overflow.
 Secondly, I found a hint to replace the software serial (bit-bang) by a hardware one.
 
@@ -11,13 +13,13 @@ I found two great [hints](https://github.com/daniel-jong/esp8266_p1meter).
 The first was that the ESP8266 has hardware support to invert the RD line.
 So no more fiddling with a bit-banged serial that causes a lot of CRC errors. 
 
-The second hint is that we can use the RX from UART0, we only need the TX for debugging and feedback.
+The second hint is that we can use the RX from UART0, we only need the TX for debugging and feedback towards the PC.
 This works fine during normal operation, but not during flashing (program development): 
 the Arduino flasher talks (TX) but also expects answers back (RX).
 
 A simple proof of concept is the [p1echo](p1echo) sketch.
 I captured some [telegrams](p1echo/meter.log) - note that I have overwritten the meter ID and adapted the CRC to make it match again.
-I have annotated the first one.
+I have annotated the first one below:
 
 ```text
 /KFM5KAIFA-METER                               // / X X X 5 Identification CR LF
@@ -64,6 +66,19 @@ I have annotated the first one.
 !70CE                                          // ! CRC CR LF
 /KFM5KAIFA-METER
 ```
+
+
+## Wiring
+
+I wanted to power the ESP8266 from the power of the P1 port.
+However I did not succeed: while booting, the board reset. I guess my meter can not source enough current; even adding caps did not help.
+
+So, my [power schematic](schematic-powered.pdf) is down the drain.
+
+I reverted to a [simple schematic](schematic-simple.pdf) - maybe I should add the pullup on TXN.
+
+![schematic](schematic-simple.png)
+
 
 ## Parsing
 

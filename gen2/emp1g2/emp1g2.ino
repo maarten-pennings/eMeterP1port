@@ -20,7 +20,7 @@
 //   |  NodeMCU  |
 //   |GND      D7|           +-+----
 //   |3V3      D8|           |6|GND
-//   |EN       RX|-----<-----|5|TXD  P1-port
+//   |EN       RX|-----<-----|5|TXN  P1-port
 //   |RSt      TX|           |4|NC    smart
 //   |GND     GND|-----=-----|3|GND   meter
 //   |VIN     3V3|----->-----|2|RTS

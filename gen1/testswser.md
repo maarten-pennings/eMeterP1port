@@ -15,7 +15,7 @@ The meter has no RX, only TX, and the TX has its bits flipped.
 
 I'm using an ESP8266 as host; it can upload the received e-meter stats to some cloud service using its WiFi stack.
 
-![e-Meter system diagram](emeter-system.drawio.png)
+![e-Meter system diagram](../emeter-system.drawio.png)
 
 Looking at the ESP8266, I want to use the (hardware) UART that is mapped to the USB for development and debugging.
 The ESP8266 does not have a second UART (there is a "half" TX only UART). 
@@ -30,7 +30,7 @@ We do not even have to download it, it is available in the stock ESP8266 board p
 ### Problem
 
 The e-Meter sends stats every 10 seconds.
-The stats are send as an textual page, each line containing a key value pair.
+The stats are sent as an textual page, each line containing a key value pair.
 An example of a line in the page is `1-0:1.8.1(025707.312*kWh)`.
 The `1-0:1.8.1` is the key, and `025707.312*kWh` the value.
 The key denotes the "Meter Reading electricity delivered to client (low tariff) in 0,001 kWh" 
