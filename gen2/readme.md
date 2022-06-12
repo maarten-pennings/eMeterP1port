@@ -11,7 +11,7 @@ Secondly, I found a hint to replace the software serial (bit-bang) by a hardware
 ## Redesign
 
 I found two great [hints](https://github.com/daniel-jong/esp8266_p1meter). 
-The first was that the ESP8266 has hardware support to invert the RD line.
+The first was that the ESP8266 has hardware support to invert the RX line.
 So no more fiddling with a bit-banged serial that causes a lot of CRC errors. 
 
 The second hint is that we can use the RX from UART0, we only need the TX for debugging and feedback towards the PC.
@@ -34,7 +34,8 @@ I reverted to a [simple schematic](schematic-simple.pdf) - maybe I should add th
 ## Echo test
 
 A simple proof of concept is the [p1echo](p1echo) sketch.
-I captured some [telegrams](p1echo/meter.log) - note that I have overwritten the meter ID and adapted the CRC to make it match again.
+I captured some [telegrams](p1echo/meter.log) - note that I have overwritten 
+the meter ID for privacy and adapted the CRC to make it match again.
 I have annotated the first one below:
 
 ```text
@@ -89,7 +90,7 @@ I have annotated the first one below:
 Second program [p1parse](p1parse) parses the telegram.
 
 
-## product
+## Product
 
 The final firmware is the [eMeter P1 gen 2](emp1g2).
 
