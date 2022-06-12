@@ -2,13 +2,13 @@
 
 ESP8266 Arduino sketch to read Dutch e-Meters and upload to ThingSpeak.
 
-Disclaimer: I put the Arduino sketch on GitHub nearly three years after I developed it. 
-As a consequence, this readme.md is written later and may not be completely accurate.
+Disclaimer: I put this Arduino sketch on GitHub nearly three years after I developed it. 
+As a consequence, this readme is written later and may not be completely accurate.
 
-Note: this is generation 1 of the solution; it uses the SoftwareSerial library to read the serial link
-from the eMeter. This is needed because the eMeter inverts the line. Later I found out that the ESP UART block
-has hardware support to invert the line back. That is when I made [generation 2](../gen2).
-You should use that version.
+Note: this is generation 1; it uses the SoftwareSerial library to read the serial link
+from the e-Meter. This is needed because the e-Meter inverts the line. 
+Later I found out that the ESP UART block has hardware support to invert the line back. 
+That is when I made [generation 2](../gen2). It is suggested to use that version.
 
 
 ## Warning
@@ -25,7 +25,7 @@ Please note that this project very probably
 **requires you to downgrade your ESP board support**.
 
 
-##  Wire to ESP8266
+##  Wire P1 to ESP8266
 
 The connector to mate with the e-meter is an RJ ("telephone") jack. 
 The official standard prescribes an **RJ12**	plug, which is a 6 pole 6 connector (6P6C) plug.
@@ -35,6 +35,9 @@ but only the middle 4 are wired (I did not succeed in running the ESP8266 from t
 This is the wiring:
 
 ![Wiring](connection.png)
+
+Observe that we pull up RTS with 3V3, this appears enought for the e-Meter to generate
+telegrams over TXN.
 
 
 ## Parsing

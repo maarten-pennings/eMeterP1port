@@ -34,6 +34,19 @@ I reverted to a [simple schematic](schematic-simple.pdf) - maybe I should add th
 ## Echo test
 
 A simple proof of concept is the [p1echo](p1echo) sketch.
+
+> Note:
+> The TX and RX of the ESP8266 are connected to the USB bridge on the board.
+> When flashing the ESP8266 the PC communicates with the ESP8266 over these lines (via USB):
+> sending commands over TX and receiving responses over RX.
+> When the e-Meter is connected its TXN is also tied to RX. 
+> As a result, uploads will fail: you must disconnect the P1 port from the NodeMCU board while
+> uploading or the RX line will get corrupted.
+
+> Note:
+> During normal operation of my eMeterP1port skecthes, the P1 can be connected to the NodeMCU,
+> as long as the PC does not send data - i.e. as long as you, the user, don't type text in the terminal.
+
 I captured some [telegrams](p1echo/meter.log) - note that I have overwritten 
 the meter ID for privacy and adapted the CRC to make it match again.
 I have annotated the first one below:
