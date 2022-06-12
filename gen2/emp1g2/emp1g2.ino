@@ -1,7 +1,8 @@
 // emp1g2.ino - Dutch smart meter reader - parses telegrams and publishes them on ThingSpeak
 #define APP_NAME    "eMP1g2"
-#define APP_VERSION "1.0"
-// 20220606  1.0  Maarten Pennings  Generation 2 of my e-Meter P1 port reader
+#define APP_VERSION "1.1"
+// 20220612  Maarten Pennings  1.1  Changed LED behavior
+// 20220606  Maarten Pennings  1.0  Generation 2 of my e-Meter P1 port reader
 
 
 #include <Nvm.h>
@@ -41,28 +42,21 @@
 #define LED_BLUEPIN     2 // on robotdyn board: blue LED near D1 and D2 pins (eg top right side)
 //#define LED_BLUEPIN    16 // on robotdyn board: blue LED near SD1 and SD2 pins (eg top left side)
 
-bool _led_ison;
-
-void led_show(void) {
-  if( _led_ison ) digitalWrite(LED_BLUEPIN, LOW); else digitalWrite(LED_BLUEPIN, HIGH);
+void led_on() {
+  digitalWrite(LED_BLUEPIN, LOW);
 }
 
-void led_on(void) {
-  _led_ison= true;
-  led_show();
+void led_off() {
+  digitalWrite(LED_BLUEPIN, HIGH);
 }
 
-void led_off(void) {
-  _led_ison= false;
-  led_show();
+void led_flash() {
+  led_on();
+  delay(50);
+  led_off();
 }
 
-void led_toggle(void) {
-  _led_ison= ! _led_ison;
-  led_show();
-}
-
-void led_init(void) { 
+void led_init() { 
   pinMode(LED_BLUEPIN, OUTPUT); 
   led_off();
   Serial.printf("led : init\n");
@@ -219,6 +213,7 @@ void http_post() {
     client.print(http_buf); client.print("\r\n");
     client.print("\r\n");
     Serial.printf("emp1: post: %s\n", srv);
+    led_flash(); // signal successful POST
   } else {
     Serial.printf("emp1: post: cannot connect to %s\n", srv);
   }
@@ -243,6 +238,7 @@ void http_get() {
     client.print("Connection: close\r\n");
     client.print("\r\n");
     Serial.printf("emp1: get : %s\n", srv);
+    led_flash(); // signal successful GET
   } else {
     Serial.printf("emp1: get : cannot connect to %s\n", srv);
   }
@@ -338,8 +334,8 @@ void loop() {
   // If in normal app mode, get and dispatch telegrams
   Tele_Result res = tele_parser_add(SERIAL_READ());
   if( res==TELE_RESULT_AVAILABLE ) {
+    led_flash(); // signal telegram correct
     // Serial.printf("emp1: available\n");
-    led_on();
     for( int i=0; i<TELE_NUMFIELDS; i++ ) Serial.printf("  %-15s %s\n",tele_field_name(i), tele_field_value(i));
     if( now-app_last_post > cfg_postperiod ) {
       http_post();
@@ -353,6 +349,5 @@ void loop() {
     } else {
       Serial.printf("emp1: get : wait %us\n", SEC(cfg_getperiod-(now-app_last_get)) );
     }
-    led_off();
   }
 }
