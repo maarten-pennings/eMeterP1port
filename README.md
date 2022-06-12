@@ -111,6 +111,8 @@ This is an example from some e-Meter found [elsewhere](http://domoticx.com/p1-po
 We need to understand the data.
 The official [spec](https://www.netbeheernederland.nl/_upload/Files/Slimme_meter_15_a727fce1f1.pdf) is helpful here.
 
+However, I do have a v4.2 meter, and the [spec](https://www.netbeheernederland.nl/_upload/Files/Slimme_meter_15_32ffe3cc38.pdf) differs on details.
+
 
 ## Product in detail
 My project is a rather complete "product":
