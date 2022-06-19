@@ -9,9 +9,9 @@
 
 // The add() function will return the abstract state of the parser
 enum Tele_Result {
-  TELE_RESULT_ERROR,      // a partial telegram is received but there was an error (timeout, syntax error, crc error, field missing).
-  TELE_RESULT_COLLECTING, // telegram data is still being collected, no errors have been found yet, but the telegram is also not yet complete.
-  TELE_RESULT_AVAILABLE,  // a complete telegram is received, its CRC matches, and all fields (as specified in tele_fields[]) are found.
+  TELE_RESULT_ERROR,      // A partial telegram is received but there was an error (timeout, syntax error, crc error, field missing).
+  TELE_RESULT_COLLECTING, // Telegram data is still being collected, no errors have been found yet, but the telegram is also not yet complete.
+  TELE_RESULT_AVAILABLE,  // A complete telegram is received, its CRC matches, and all fields are accessible via tele_field_xx().
 };
 
 
@@ -19,11 +19,11 @@ enum Tele_Result {
 void         tele_init();
 
 
-// Start and feed the parser
+// Feed the parser characters (from Serial), type is int because it needs feeding -1 for no-char received. This function tracks time.
 Tele_Result  tele_parser_add(int ch);
 
 
-// Once the parser's add() returns TELE_RESULT_AVAILABLE, the field_value is available.
+// Once the parser's add() returns TELE_RESULT_AVAILABLE, the fields are available.
 // Note 0 <= ix < TELE_NUMFIELDS
 const char   tele_field_key(int ix);
 const char * tele_field_name(int ix);
@@ -32,7 +32,7 @@ const char * tele_field_value(int ix);
 
 
 
-// Example telegrams (meter ids are anonymized, CRC is adapted for that
+// Example telegrams (meter ids are anonymized, CRC is adapted for that) for testing
 
 
 #define TELE_EXAMPLE_1 \
